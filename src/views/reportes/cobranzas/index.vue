@@ -23,13 +23,13 @@
         highlight-current-row
         style="width: 50%"
       >
-        <el-table-column align="center" prop="fecha" label="Fecha" sortable>
+        <el-table-column align="center" prop="fecha" label="Fecha">
           <template slot-scope="scope">
             <span>{{ scope.row.FECCOBROUT }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" prop="importe" label="Total Cobrado" sortable>
+        <el-table-column align="center" prop="importe" label="Total Cobrado">
           <template slot-scope="scope">$ {{ scope.row.TOTCOBROUT }}</template>
         </el-table-column>
       </el-table>

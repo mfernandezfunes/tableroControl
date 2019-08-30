@@ -9,6 +9,9 @@
       label-position="left"
     >
       <div class="title-container">
+        <img v-if="logo" :src="logo" class="logo" />
+      </div>
+      <div class="title-container">
         <h3 class="title">Ingreso</h3>
       </div>
 
@@ -19,7 +22,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="Nombre de Usuario"
           name="username"
           type="text"
           tabindex="1"
@@ -36,7 +39,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="Contraseña"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -52,7 +55,7 @@
         type="primary"
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
-      >Login</el-button>
+      >Ingresar</el-button>
     </el-form>
   </div>
 </template>
@@ -65,21 +68,22 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+        callback(new Error("Ingrese un nombre de usuario correcto"));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error("La contraseña debe contener al menos 6 dígitos"));
       } else {
         callback();
       }
     };
     return {
+      logo: "images/logo.png",
       loginForm: {
-        username: "admin",
+        username: "",
         password: ""
       },
       loginRules: {
@@ -230,6 +234,9 @@ $light_gray: #eee;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+    }
+    .logo {
+      align: center;
     }
   }
 

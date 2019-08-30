@@ -22,7 +22,7 @@
           </a>
 
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">Cerrar Sesion</span>
+            <span style="display:block;" @click="logout">Cerrar Sesión</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

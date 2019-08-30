@@ -2,12 +2,12 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title">{{ title }} </h1>
+        <img v-if="logo" :src="logo" class="sidebar-logo" />
+        <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <img v-if="logo" :src="logo" class="sidebar-logo" />
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'SidebarLogo',
+  name: "SidebarLogo",
   props: {
     collapse: {
       type: Boolean,
@@ -24,11 +24,11 @@ export default {
   },
   data() {
     return {
-      title: 'Tablero',
-      logo: 'https://soporte.valot.com.ar/osticket/scp/logo.php?login'
-    }
+      title: "",
+      logo: "images/logo.png"
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -55,7 +55,6 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
       height: 32px;
       vertical-align: middle;
       margin-right: 12px;
