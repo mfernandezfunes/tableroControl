@@ -2,6 +2,7 @@
   <div class="app-container">
     <div>
       <h1>Recursos Humanos</h1>
+      <h3>Muestra por planta operativa la cantidad de empleados activos a la fecha de petición</h3>
     </div>
 
     <el-table
@@ -22,7 +23,11 @@
       </el-table-column>
 
       <el-table-column align="center" prop="dotacion" label="Dotacion Actual">
-        <template slot-scope="scope">{{ scope.row.DOTACIONACT }}</template>
+        <template slot-scope="scope">{{ scope.row.DOTACION }}</template>
+      </el-table-column>
+
+      <el-table-column align="center" prop="dotacion" label="Ausentes">
+        <template slot-scope="scope">{{ scope.row.AUSENTES }}</template>
       </el-table-column>
     </el-table>
   </div>

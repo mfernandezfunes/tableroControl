@@ -2,11 +2,14 @@
   <div class="app-container">
     <div>
       <h1>Cobranzas</h1>
+      <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
     </div>
     <div class="block">
       <span class="demonstration">Mes</span>
       <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
       <el-button @click="actualizarDatos">Actualizar</el-button>
+      <el-button @click="actualizarGrafico">Actualizar Grafico</el-button>
+      <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
     </div>
     <highcharts :options="chartOptions"></highcharts>
     <div>
@@ -25,12 +28,12 @@
       >
         <el-table-column align="center" prop="fecha" label="Fecha">
           <template slot-scope="scope">
-            <span>{{ scope.row.FECCOBROUT }}</span>
+            <span>{{ formatearFecha(scope.row.FECCOBROUT) }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="importe" label="Total Cobrado">
-          <template slot-scope="scope">$ {{ scope.row.TOTCOBROUT }}</template>
+          <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTCOBROUT) }}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -39,6 +42,7 @@
 
 <script>
 import axios from "axios";
+import numeral from "numeral";
 import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
 
@@ -106,13 +110,18 @@ export default {
     this.fetchData();
   },
   methods: {
-    formatearPeso(value) {
-      if (value) value = parseFloat(value);
-      let val = (value / 1).toFixed(2).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    imprimirDatos() {
+      console.log(this.list);
+    },
+    formatearPeso(valor) {
+      return numeral(valor).format("0,0.00");
+    },
+    formatearFecha(fecha) {
+      return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     },
     actualizarDatos() {
       if (this.periodo !== null) {
+        this.list = null;
         let year = this.periodo.getFullYear();
         let month = this.periodo.getMonth() + 1;
         let para = `?AnoCobranza=${year}&MesCobranza=${month}`;
@@ -131,39 +140,50 @@ export default {
         });
       }
     },
+    actualizarGrafico() {
+      let fechas, valot
+     
+        Message({
+          message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
+          type: "success",
+          duration: 3 * 1000
+        });
+      
+      }
+    },
     fetchData(periodo) {
       const ENDPOINT = "WSCOBDIAP";
       this.listLoading = true;
+      this.list = null;
       let fechas = "";
       if (!isUndefined(periodo)) fechas = periodo;
 
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
-          this.list = response.data.COBRODIARIOOU;
+          let lista = response.data.COBRODIARIOOU;
+          this.list = this.convertToNumberAndClean(lista);
           //console.log(this.list);
         })
         .catch(error => {
-          //console.log("err" + error); // for debu
           Message({
             message: "SE HA DETECTADO UN ERROR: " + error.message,
             type: "error",
             duration: 5 * 1000
           });
-          //return Promise.reject(error);
         })
         .finally(() => (this.listLoading = false));
     },
     getSumatoria(param) {
       const { columns, data } = param;
       const sums = [];
-      console.log(param);
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "Total";
+          sums[index] = "TOTAL";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
+
         if (!values.every(value => isNaN(value))) {
           sums[index] =
             "$ " +
@@ -179,35 +199,15 @@ export default {
           sums[index] = "N/A";
         }
       });
-
       return sums;
     },
-    getPromedio(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "Promedio";
-          return;
-        }
-        const values = data.map(item => Number(item[column.property]));
-        if (!values.every(value => isNaN(value))) {
-          sums[index] =
-            "$ " +
-            values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-        } else {
-          sums[index] = "N/A";
-        }
-      });
-
-      return sums;
+    convertToNumberAndClean(lista) {
+      let nuevaLista = [];
+      for (let elemento of lista) {
+        elemento.TOTCOBROUT = parseFloat(elemento.TOTCOBROUT.replace(",", "."));
+        if (elemento.PRODUCTO != "") nuevaLista.push(elemento);
+      }
+      return nuevaLista;
     }
   }
 };

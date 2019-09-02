@@ -2,6 +2,7 @@
   <div class="app-container">
     <div>
       <h1>Ventas</h1>
+      <h3>Muestra por día del mes consultado la sumatoria de los valores facturados.</h3>
     </div>
     <div class="block">
       <span class="demonstration">Mes</span>
@@ -23,12 +24,12 @@
       >
         <el-table-column align="center" prop="fecha" label="Fecha" sortable>
           <template slot-scope="scope">
-            <span>{{ scope.row.FECFACTOUT }}</span>
+            <span>{{ formatearFecha(scope.row.fecfactout) }}</span>
           </template>
         </el-table-column>
 
         <el-table-column align="center" prop="importe" label="Total Vendido" sortable>
-          <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTFACTOUT) }}</template>
+          <template slot-scope="scope">$ {{ formatearPeso(scope.row.totfactout) }}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -37,6 +38,7 @@
 
 <script>
 import axios from "axios";
+import numeral from "numeral";
 import { MessageBox, Message } from "element-ui";
 import { isUndefined } from "util";
 
@@ -104,10 +106,17 @@ export default {
     this.fetchData();
   },
   methods: {
-    formatearPeso(value) {
-      value = parseFloat(value);
-      let val = (value / 1).toFixed(2).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    formatearPeso(valor) {
+      return numeral(valor).format("0,0.00");
+    },
+    formatearFecha(fecha) {
+      let fechaFormateada = "";
+      if (fecha !== "")
+        fechaFormateada = fecha.replace(
+          /^(\d{4})-(\d{2})-(\d{2})$/g,
+          "$3/$2/$1"
+        );
+      return fechaFormateada;
     },
     actualizarDatos() {
       if (this.periodo !== null) {
@@ -138,17 +147,17 @@ export default {
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
-          this.list = response.data.FACTUDIARIOOU;
-          //console.log(this.list);
+          let lista = response.data.FACTUDIARIOOU;
+          for (const elemento of lista) {
+            if (elemento.PRODUCTO != "") this.list.push(elemento);
+          }
         })
         .catch(error => {
-          //console.log("err" + error); // for debu
           Message({
             message: "SE HA DETECTADO UN ERROR: " + error.message,
             type: "error",
             duration: 5 * 1000
           });
-          //return Promise.reject(error);
         })
         .finally(() => (this.listLoading = false));
     }
