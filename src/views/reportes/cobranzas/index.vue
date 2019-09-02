@@ -9,6 +9,7 @@
       <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
       <el-button @click="actualizarDatos">Actualizar</el-button>
       <el-button @click="actualizarGrafico">Actualizar Grafico</el-button>
+      <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
       <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
     </div>
     <highcharts :options="chartOptions"></highcharts>
@@ -87,18 +88,14 @@ export default {
         title: {
           text: "Histórico de Cobranzas"
         },
-        series: [
-          {
-            name: "Cobrado $",
-            data: [120244.5, 455455.1, 545778] // sample data
-          }
-        ],
+        series: [],
         yAxis: {
           title: {
             text: "$ Pesos"
           }
         },
         xAxis: {
+          categories: [],
           title: {
             text: "Fecha"
           }
@@ -126,6 +123,7 @@ export default {
         let month = this.periodo.getMonth() + 1;
         let para = `?AnoCobranza=${year}&MesCobranza=${month}`;
         this.fetchData(para);
+
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
           type: "success",
@@ -141,14 +139,27 @@ export default {
       }
     },
     actualizarGrafico() {
-      let fechas, valot
-     
-        Message({
-          message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-          type: "success",
-          duration: 3 * 1000
-        });
-      
+      let fechas = [],
+        valores = [];
+      for (let dia of this.list) {
+        fechas.push(dia.FECCOBROUT);
+        valores.push(dia.TOTCOBROUT);
+      }
+      this.chartOptions.series.push({
+        name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
+        data: valores
+      });
+      console.log(valores);
+
+      Message({
+        message: `Se solicito la actualizacion del ploteo del Gráfico`,
+        type: "success",
+        duration: 3 * 1000
+      });
+    },
+    limpiarGrafico() {
+      for (let iterator of this.chartOptions.series) {
+        this.chartOptions.series = [];
       }
     },
     fetchData(periodo) {
