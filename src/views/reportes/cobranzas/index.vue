@@ -8,7 +8,7 @@
       <span class="demonstration">Mes</span>
       <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
       <el-button @click="actualizarDatos">Actualizar</el-button>
-      <el-button @click="actualizarGrafico">Actualizar Grafico</el-button>
+      <el-button @click="actualizarGrafico">Graficar</el-button>
       <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
       <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
     </div>
@@ -95,7 +95,39 @@ export default {
           }
         },
         xAxis: {
-          categories: [],
+          categories: [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
           title: {
             text: "Fecha"
           }
@@ -158,9 +190,7 @@ export default {
       });
     },
     limpiarGrafico() {
-      for (let iterator of this.chartOptions.series) {
-        this.chartOptions.series = [];
-      }
+      this.chartOptions.series = [];
     },
     fetchData(periodo) {
       const ENDPOINT = "WSCOBDIAP";
