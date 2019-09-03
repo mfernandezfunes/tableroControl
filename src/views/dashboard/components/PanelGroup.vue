@@ -6,10 +6,11 @@
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Cobranzas
-          </div>
+          <div class="card-panel-text">Ventas</div>
+          <div>Ultimo día hábil:</div>
           <count-to :start-val="0" :end-val="12411" :duration="2600" class="card-panel-num" />
+          <div>Promedio:</div>
+          <count-to :start-val="0" :end-val="10000000" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -19,10 +20,18 @@
           <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Ventas
-          </div>
-          <count-to :start-val="0" :end-val="14254" :duration="3000" class="card-panel-num" />
+          <div class="card-panel-text">Cobranzas</div>
+          <div>Ultimo día hábil:</div>
+          <count-to
+            :start-val="0"
+            :prefix="$"
+            :decimals="2"
+            :end-val="14254.4567"
+            :duration="3000"
+            class="card-panel-num"
+          />
+          <div>Promedio:</div>
+          <count-to :start-val="0" :end-val="10000000.45678"  :decimals="2" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -32,10 +41,11 @@
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Produccion
-          </div>
+          <div class="card-panel-text">Producción</div>
+          <div>Ultimo día hábil:</div>
           <count-to :start-val="0" :end-val="25356" :duration="3200" class="card-panel-num" />
+          <div>Promedio:</div>
+          <count-to :start-val="0" :end-val="10000000" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -45,10 +55,8 @@
           <svg-icon icon-class="shopping" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            Shoppings
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <div class="card-panel-text">S</div>
+          <count-to :start-val="0" :end-val="1" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -56,7 +64,7 @@
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
+import CountTo from "vue-count-to";
 
 export default {
   components: {
@@ -64,10 +72,10 @@ export default {
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit("handleSetLineChartData", type);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -79,15 +87,15 @@ export default {
   }
 
   .card-panel {
-    height: 108px;
+    height: 158px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 
     &:hover {
       .card-panel-icon-wrapper {
@@ -107,7 +115,7 @@ export default {
       }
 
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
 
@@ -124,7 +132,7 @@ export default {
     }
 
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
@@ -147,7 +155,7 @@ export default {
       margin-left: 0px;
 
       .card-panel-text {
-        line-height: 18px;
+        line-height: 20px;
         color: rgba(0, 0, 0, 0.45);
         font-size: 16px;
         margin-bottom: 12px;
@@ -160,7 +168,7 @@ export default {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }

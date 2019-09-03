@@ -34,66 +34,66 @@
 </template>
 
 <script>
-import axios from "axios";
-import { MessageBox, Message } from "element-ui";
+import axios from 'axios'
+import { MessageBox, Message } from 'element-ui'
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true
-    };
+    }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      this.listLoading = true;
+      this.listLoading = true
       axios
-        .get(process.env.VUE_APP_AS400_API + "WSDOTACTP")
+        .get(process.env.VUE_APP_AS400_API + 'WSDOTACTP')
         .then(response => {
-          this.list = response.data.DOTACIONACTOU;
-          console.log(this.list);
+          this.list = response.data.DOTACIONACTOU
+          console.log(this.list)
         })
         .catch(error => {
-          //console.log("err" + error); // for debug
+          // console.log("err" + error); // for debug
           Message({
-            message: "SE HA DETECTADO UN ERROR: " + error.message,
-            type: "error",
+            message: 'SE HA DETECTADO UN ERROR: ' + error.message,
+            type: 'error',
             duration: 5 * 1000
-          });
-          //return Promise.reject(error);
+          })
+          // return Promise.reject(error);
         })
-        .finally(() => (this.listLoading = false));
+        .finally(() => (this.listLoading = false))
     },
     getSumatoria(param) {
-      const { columns, data } = param;
-      const sums = [];
+      const { columns, data } = param
+      const sums = []
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "Total";
-          return;
+          sums[index] = 'Total'
+          return
         }
-        const values = data.map(item => Number(item[column.property]));
+        const values = data.map(item => Number(item[column.property]))
         if (!values.every(value => isNaN(value))) {
           sums[index] =
-            "$ " +
+            '$ ' +
             values.reduce((prev, curr) => {
-              const value = Number(curr);
+              const value = Number(curr)
               if (!isNaN(value)) {
-                return prev + curr;
+                return prev + curr
               } else {
-                return prev;
+                return prev
               }
-            }, 0);
+            }, 0)
         } else {
-          sums[index] = "N/A";
+          sums[index] = 'N/A'
         }
-      });
+      })
 
-      return sums;
+      return sums
     }
   }
-};
+}
 </script>

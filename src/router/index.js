@@ -31,86 +31,86 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/tablero',
-    children: [{
-      path: 'tablero',
-      name: 'Tablero',
-      component: () => import('@/views/dashboard/index'),
-      meta: {
-        title: 'Tablero',
-        icon: 'dashboard'
-      }
-    }]
-  },
-  {
-    path: '/reportes',
-    component: Layout,
-    redirect: '/reportes/table',
-    name: 'Reportes',
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () => import('@/views/404'),
+  hidden: true
+},
+{
+  path: '/',
+  component: Layout,
+  redirect: '/tablero',
+  children: [{
+    path: 'tablero',
+    name: 'Tablero',
+    component: () => import('@/views/dashboard/index'),
     meta: {
-      title: 'Reportes',
-      icon: 'example'
-    },
-    children: [{
-        path: 'produccion',
-        name: 'Produccion',
-        component: () => import('@/views/reportes/produccion/index'),
-        meta: {
-          title: 'Produccion',
-          icon: 'tree'
-        }
-      },
-      {
-        path: 'ventas',
-        name: 'Ventas',
-        component: () => import('@/views/reportes/ventas/index'),
-        meta: {
-          title: 'Ventas',
-          icon: 'money'
-        }
-      },
-      {
-        path: 'cobranzas',
-        name: 'Cobranzas',
-        component: () => import('@/views/reportes/cobranzas/index'),
-        meta: {
-          title: 'Cobranzas',
-          icon: 'money'
-        }
-      },
-      {
-        path: 'rrhh',
-        name: 'RRHH',
-        component: () => import('@/views/reportes/rrhh/index'),
-        meta: {
-          title: 'RRHH',
-          icon: 'people'
-        }
-      },
-      {
-        path: 'dolar',
-        name: 'Dolar',
-        component: () => import('@/views/reportes/dolar/index'),
-        meta: {
-          title: 'Dolar Historico',
-          icon: 'people'
-        }
-      }
-    ]
+      title: 'Tablero',
+      icon: 'dashboard'
+    }
+  }]
+},
+{
+  path: '/reportes',
+  component: Layout,
+  redirect: '/reportes/table',
+  name: 'Reportes',
+  meta: {
+    title: 'Reportes',
+    icon: 'example'
   },
-  /*
+  children: [{
+    path: 'produccion',
+    name: 'Produccion',
+    component: () => import('@/views/reportes/produccion/index'),
+    meta: {
+      title: 'Produccion',
+      icon: 'tree'
+    }
+  },
+  {
+    path: 'ventas',
+    name: 'Ventas',
+    component: () => import('@/views/reportes/ventas/index'),
+    meta: {
+      title: 'Ventas',
+      icon: 'money'
+    }
+  },
+  {
+    path: 'cobranzas',
+    name: 'Cobranzas',
+    component: () => import('@/views/reportes/cobranzas/index'),
+    meta: {
+      title: 'Cobranzas',
+      icon: 'money'
+    }
+  },
+  {
+    path: 'rrhh',
+    name: 'RRHH',
+    component: () => import('@/views/reportes/rrhh/index'),
+    meta: {
+      title: 'RRHH',
+      icon: 'people'
+    }
+  },
+  {
+    path: 'dolar',
+    name: 'Dolar',
+    component: () => import('@/views/reportes/dolar/index'),
+    meta: {
+      title: 'Dolar Historico',
+      icon: 'people'
+    }
+  }
+  ]
+},
+/*
     {
       path: '/form',
       component: Layout,
@@ -123,7 +123,7 @@ export const constantRoutes = [{
         }
       ]
     },*/
-  /*
+/*
     {
       path: '/nested',
       component: Layout,
@@ -182,23 +182,23 @@ export const constantRoutes = [{
       ]
     },
   */
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [{
-      path: 'http://intranet.valot.com.ar/webmail',
-      meta: {
-        title: 'Webmail',
-        icon: 'link'
-      }
-    }]
-  },
-  // 404 page must be placed at the end !!!
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  }
+{
+  path: 'external-link',
+  component: Layout,
+  children: [{
+    path: 'http://intranet.valot.com.ar/webmail',
+    meta: {
+      title: 'Webmail',
+      icon: 'link'
+    }
+  }]
+},
+// 404 page must be placed at the end !!!
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}
 ]
 
 const createRouter = () => new Router({

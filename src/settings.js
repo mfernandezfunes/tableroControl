@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Intranet VALOT',
+  title: 'Intranet VALOT - Panel de Control',
 
   /**
    * @type {boolean} true | false

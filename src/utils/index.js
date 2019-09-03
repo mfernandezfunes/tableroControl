@@ -103,14 +103,14 @@ export function param2Obj(url) {
   return JSON.parse(
     '{"' +
     decodeURIComponent(search)
-    .replace(/"/g, '\\"')
-    .replace(/&/g, '","')
-    .replace(/=/g, '":"')
-    .replace(/\+/g, ' ') +
+      .replace(/"/g, '\\"')
+      .replace(/&/g, '","')
+      .replace(/=/g, '":"')
+      .replace(/\+/g, ' ') +
     '"}'
   )
 }
 export function formatearPeso(value) {
-  let val = (value / 1).toFixed(2).replace(".", ",");
-  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const val = (value / 1).toFixed(2).replace('.', ',')
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }

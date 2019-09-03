@@ -9,31 +9,32 @@
       v-loading="listLoading"
       :data="list"
       :default-sort="{prop: 'planta', order: 'ascending'}"
-      :summary-method="getSumatoria"
-      element-loading-text="Cargando"
+      element-loading-text="Cargando aguarde..."
       border
-      fit
+      empty-text="Sin Datos obtenidos"
       stripe
       show-summary
+      :summary-method="getSumatoria"
+      fit
       highlight-current-row
       style="width: 100%"
     >
       <el-table-column align="center" prop="planta" label="Planta" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.PLANTA }}</span>
+          <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" prop="producto" label="Producto">
-        <template slot-scope="scope">{{ scope.row.PRODUCTO }}</template>
+        <template slot-scope="scope">{{ toFirstUp(scope.row.PRODUCTO) }}</template>
       </el-table-column>
 
       <el-table-column align="center" prop="total" label="Total">
-        <template slot-scope="scope">{{ formatearPeso(scope.row.PRODUCCIONAC) }}</template>
+        <template slot-scope="scope">{{ scope.row.PRODUCCIONAC }}</template>
       </el-table-column>
 
       <el-table-column align="center" prop="unidad" label="U/M">
-        <template slot-scope="scope">{{ scope.row.UM }}</template>
+        <template slot-scope="scope">{{ toFirstUp(scope.row.UM) }}</template>
       </el-table-column>
     </el-table>
     {{ formatearPeso(sumaTotal) }}
@@ -81,14 +82,14 @@ export default {
     },
     sumatoria(lista) {
       let sumaTotal = 0;
-      for (let item of lista) {
+      for (const item of lista) {
         sumaTotal += item.PRODUCCIONAC;
       }
       return sumaTotal;
     },
     convertToNumberAndClean(lista) {
-      let nuevaLista = [];
-      for (let elemento of lista) {
+      const nuevaLista = [];
+      for (const elemento of lista) {
         elemento.PRODUCCIONAC = parseFloat(
           elemento.PRODUCCIONAC.replace(",", ".")
         );
@@ -96,19 +97,30 @@ export default {
       }
       return nuevaLista;
     },
+    toFirstUp(cadena) {
+      if (typeof cadena == "string") {
+        var pieces = cadena.split(" ");
+        for (let i = 0; i < pieces.length; i++) {
+          let j = pieces[i].charAt(0).toUpperCase();
+          pieces[i] = j + pieces[i].substr(1).toLowerCase();
+        }
+        return pieces.join(" ");
+      }
+    },
     getSumatoria(param) {
-      const { columns, data } = param;
-      const sums = [];
+      var { columns, data } = param;
+      var sums = [];
+
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = "TOTAL";
           return;
         }
-        const values = data.map(item => Number(item[column.property]));
-
+        var values = data.map(item => Number(item[column.property]));
+        console.log();
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr);
+            var value = Number(curr);
             if (!isNaN(value)) {
               return prev + curr;
             } else {
@@ -119,7 +131,7 @@ export default {
           sums[index] = "N/A";
         }
       });
-      console.log(sums);
+      //console.log(sums);
       return sums;
     }
   }

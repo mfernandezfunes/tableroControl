@@ -4,7 +4,7 @@
     <div>
       <h1>Dolar Histórico</h1>
     </div>
-    <highcharts :options="chartOptions"></highcharts>
+    <highcharts :options="chartOptions" />
   </div>
 </template>
 
@@ -16,19 +16,30 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true,
-      periodo: null,
       error: null,
       chartOptions: {
         title: {
           text: "Cotización Histórica"
         },
-        series: [
-          {
-            name: "Dolar Oficial",
-            data: [42.5, 58.1, 62] // sample data
+        legend: {
+          shadow: true,
+          verticalAlign: "bottom"
+        },
+        tooltip: {
+          shared: true,
+          followPointer: true
+        },
+        plotOptions: {
+          column: {
+            grouping: true,
+            shadow: false,
+            borderWidth: 0
           }
-        ],
+        },
+        credits: {
+          enabled: false
+        },
+        series: [],
         subtitle: {
           text: "Fuente: Ambito Financiero"
         },
@@ -38,6 +49,7 @@ export default {
           }
         },
         xAxis: {
+          categories: [],
           title: {
             text: "Fecha"
           }
@@ -47,36 +59,14 @@ export default {
   },
   created() {
     this.fetchData();
-    this.list = this.convertir2(this.list);
   },
   methods: {
-    convertirJson: function() {
-      let headers = lista.shift();
-      let result = lista.map(a =>
-        headers.reduce((r, k, i) => Object.assign(r, { [k]: a[i] }), {})
-      );
-      return JSON.stringify(result);
-    },
-    convertir2: function(lista) {
-      let headers = lista.shift();
-      result = lista.map(function(a) {
-        var object = {};
-        headers.forEach(function(k, i) {
-          object[k] = a[i];
-        });
-        return object;
-      });
-
-      console.log(JSON.stringify(result));
-      console.log(result);
-    },
     fetchData: function() {
-      this.listLoading = true;
       axios
         .get(process.env.VUE_APP_DOLAR_API)
         .then(response => {
           this.list = response.data;
-          console.log(response.data);
+          this.getSeries();
         })
         .catch(error => {
           Message({
@@ -87,6 +77,34 @@ export default {
           return Promise.reject(error);
         })
         .finally(() => (this.listLoading = false));
+    },
+    getSeries() {
+      let resultados = [];
+      resultados = this.list;
+      let fechas = [],
+        serie1 = [],
+        serie2 = [];
+      for (let item of resultados) {
+        fechas.push(item["0"]);
+        serie1.push(item["1"]);
+        serie2.push(item["2"]);
+      }
+      fechas.shift();
+      serie1.shift();
+      serie2.shift();
+
+      this.chartOptions.xAxis.categories.push(...fechas);
+
+      this.chartOptions.series.push(
+        JSON.parse(
+          `{ "name": "Dólar Oficial", "data": [ ${serie1} ], "color": "#00FF00" }`
+        )
+      );
+      this.chartOptions.series.push(
+        JSON.parse(
+          `{ "name": "Dólar Informal", "data": [ ${serie2} ], "color": "#FF0000" }`
+        )
+      );
     }
   }
 };
