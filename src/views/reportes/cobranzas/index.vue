@@ -21,6 +21,7 @@
         :summary-method="getSumatoria"
         show-summary
         element-loading-text="Cargando"
+        empty-text="No se han recuperado datos del servidor"
         border
         fit
         stripe
@@ -53,37 +54,6 @@ export default {
       list: null,
       listLoading: true,
       periodo: null,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "Ult. Semana",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "Ult. mes",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "Ult. 3 meses",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
-      },
       chartOptions: {
         title: {
           text: "Histórico de Cobranzas"

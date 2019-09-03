@@ -4,39 +4,50 @@
       <h1>Producción Mensual Acumulada</h1>
       <h3>Muestra por planta operativa el acumulado mensual en kilos de la producción de productos en papel. Para el caso del mes corriente recupera el acumulado a la fecha/hora de petición.</h3>
     </div>
+    <div class="block">
+      <span class="demonstration">Mes</span>
+      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+      <el-button @click="actualizarDatos">Actualizar</el-button>
+      <el-button @click="actualizarGrafico">Graficar</el-button>
+      <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
+    </div>
 
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      :default-sort="{prop: 'planta', order: 'ascending'}"
-      element-loading-text="Cargando aguarde..."
-      border
-      empty-text="Sin Datos obtenidos"
-      stripe
-      show-summary
-      :summary-method="getSumatoria"
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column align="center" prop="planta" label="Planta" sortable>
-        <template slot-scope="scope">
-          <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
-        </template>
-      </el-table-column>
+    <highcharts :options="chartOptions"></highcharts>
 
-      <el-table-column align="center" prop="producto" label="Producto">
-        <template slot-scope="scope">{{ toFirstUp(scope.row.PRODUCTO) }}</template>
-      </el-table-column>
+    <div>
+      <el-table
+        v-loading="listLoading"
+        :data="list"
+        :default-sort="{prop: 'planta', order: 'ascending'}"
+        element-loading-text="Cargando aguarde..."
+        border
+        empty-text="No se han recuperado datos del servidor"
+        stripe
+        show-summary
+        :summary-method="getSumatoria"
+        fit
+        highlight-current-row
+        style="width: 100%"
+      >
+        <el-table-column align="center" prop="planta" label="Planta" sortable>
+          <template slot-scope="scope">
+            <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column align="center" prop="total" label="Total">
-        <template slot-scope="scope">{{ scope.row.PRODUCCIONAC }}</template>
-      </el-table-column>
+        <el-table-column align="center" prop="producto" label="Producto">
+          <template slot-scope="scope">{{ toFirstUp(scope.row.PRODUCTO) }}</template>
+        </el-table-column>
 
-      <el-table-column align="center" prop="unidad" label="U/M">
-        <template slot-scope="scope">{{ toFirstUp(scope.row.UM) }}</template>
-      </el-table-column>
-    </el-table>
+        <el-table-column align="center" prop="total" label="Total">
+          <template slot-scope="scope">{{ scope.row.PRODUCCIONAC }}</template>
+        </el-table-column>
+
+        <el-table-column align="center" prop="unidad" label="U/M">
+          <template slot-scope="scope">{{ toFirstUp(scope.row.UM) }}</template>
+        </el-table-column>
+      </el-table>
+    </div>
     {{ formatearPeso(sumaTotal) }}
   </div>
 </template>
@@ -52,7 +63,8 @@ export default {
     return {
       list: [],
       sumaTotal: 0,
-      listLoading: true
+      listLoading: true,
+      periodo: null
     };
   },
   created() {
@@ -61,6 +73,39 @@ export default {
   methods: {
     formatearPeso(valor) {
       return numeral(valor).format("0,0.00");
+    },
+    imprimirDatos() {
+      console.log(this.list);
+    },
+    limpiarGrafico() {
+      this.$alert("Funcion no implementada", "Info", {
+        confirmButtonText: "OK",
+        callback: action => {
+          this.$message({
+            type: "info",
+            message: `action: ${action}`
+          });
+        }
+      });
+    },
+    actualizarGrafico() {
+      let fechas = [],
+        valores = [];
+      for (let dia of this.list) {
+        fechas.push(dia.FECCOBROUT);
+        valores.push(dia.TOTCOBROUT);
+      }
+      this.chartOptions.series.push({
+        name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
+        data: valores
+      });
+      console.log(valores);
+
+      Message({
+        message: `Se solicito la actualizacion del ploteo del Gráfico`,
+        type: "success",
+        duration: 3 * 1000
+      });
     },
     fetchData() {
       this.listLoading = true;
