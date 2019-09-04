@@ -15,6 +15,7 @@
             :disabled="item.disabled"
           ></el-option>
         </el-select>
+
         <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
         <el-button @click="actualizarDatos">Actualizar</el-button>
         <el-button @click="actualizarGrafico">Graficar</el-button>
@@ -22,36 +23,51 @@
         <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
       </div>
     </el-card>
-    <el-card class="box-card">
-      <div>
-        <highcharts :options="chartOptions"></highcharts>
-      </div>
-    </el-card>
-    <div>
-      <el-table
-        v-loading="listLoading"
-        :data="list"
-        :default-sort="{prop: 'fecha', order: 'ascending'}"
-        show-summary
-        element-loading-text="Cargando"
-        empty-text="No se han recuperado datos del servidor"
-        border
-        fit
-        stripe
-        highlight-current-row
-        style="width: 50%"
-      >
-        <el-table-column align="center" prop="fecha" label="Fecha">
-          <template slot-scope="scope">
-            <span>{{ formatearFecha(scope.row.FECCOBROUT) }}</span>
-          </template>
-        </el-table-column>
 
-        <el-table-column align="center" prop="importe" label="Total Cobrado">
-          <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTCOBROUT) }}</template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-row>
+      <el-col :span="12">
+        <div class="grid-content bg-purple">
+          <el-card class="box-card">
+            <div>
+              <el-table
+                v-loading="listLoading"
+                :data="list"
+                :default-sort="{prop: 'fecha', order: 'ascending'}"
+                show-summary
+                element-loading-text="Cargando"
+                empty-text="No se han recuperado datos del servidor"
+                border
+                fit
+                stripe
+                highlight-current-row
+                height="400"
+              >
+                <el-table-column align="center" prop="fecha" label="Fecha">
+                  <template slot-scope="scope">
+                    <span>{{ formatearFecha(scope.row.FECCOBROUT) }}</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="center" prop="importe" label="Total Cobrado">
+                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTCOBROUT) }}</template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple-light">
+          <div>
+            <el-card class="box-card">
+              <div>
+                <highcharts :options="chartOptions"></highcharts>
+              </div>
+            </el-card>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

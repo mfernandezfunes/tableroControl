@@ -38,40 +38,50 @@
         <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
       </div>
     </el-card>
-    <el-card class="box-card">
-      <div>
-        <highcharts :options="chartOptions" />
-      </div>
-    </el-card>
 
-    <div>
-      <el-table
-        v-loading="listLoading"
-        :data="list"
-        :default-sort="{prop: 'fecha', order: 'ascending'}"
-        :summary-method="getSumatoria"
-        show-summary
-        element-loading-text="Cargando"
-        empty-text="No se han recuperado datos del servidor"
-        border
-        fit
-        stripe
-        highlight-current-row
-        style="width: 50%"
-      >
-        <el-table-column align="center" prop="fecha" label="FECHA">
-          <template slot-scope="scope">
-            <span>{{ formatearFecha(scope.row.FECFACTOUT) }}</span>
-          </template>
-        </el-table-column>
+    <el-row>
+      <el-col :span="12">
+        <div class="grid-content bg-purple">
+          <el-card class="box-card">
+            <div>
+              <el-table
+                v-loading="listLoading"
+                :data="list"
+                :default-sort="{prop: 'fecha', order: 'ascending'}"
+                :summary-method="getSumatoria"
+                show-summary
+                element-loading-text="Cargando"
+                empty-text="No se han recuperado datos del servidor"
+                border
+                fit
+                stripe
+                highlight-current-row
+                height="400"
+              >
+                <el-table-column align="center" prop="fecha" label="FECHA">
+                  <template slot-scope="scope">
+                    <span>{{ formatearFecha(scope.row.FECFACTOUT) }}</span>
+                  </template>
+                </el-table-column>
 
-        <el-table-column align="center" prop="importe" label="TOTAL $">
-          <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTFACTOUT) }}</template>
-        </el-table-column>
-      </el-table>
-    </div>
-
-    <el-calendar v-model="list"></el-calendar>
+                <el-table-column align="center" prop="importe" label="MONTO">
+                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTFACTOUT) }}</template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple-light">
+          <el-card class="box-card">
+            <div>
+              <highcharts :options="chartOptions" />
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
