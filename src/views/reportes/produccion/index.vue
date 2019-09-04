@@ -83,7 +83,7 @@ export default {
         {
           value: "2",
           label: "HIGIENE 3000 S.A.",
-          disabled: true
+          disabled: false
         }
       ],
       empresa: "1"
@@ -106,6 +106,7 @@ export default {
         let month = this.periodo.getMonth() + 1;
         let empresa = this.empresa;
         let para = `?CodigoEmpresa=${empresa}&AnoProduccion=${year}&MesProduccion=${month}`;
+
         this.fetchData(para);
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,

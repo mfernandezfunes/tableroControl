@@ -5,7 +5,7 @@
       <h3>Muestra por planta operativa la cantidad de empleados activos a la fecha de petición</h3>
     </div>
     <el-card class="box-card">
-      <el-select v-model="empresa" placeholder="Seleccione la Empresa">
+      <el-select v-model="empresa" placeholder="Seleccione la Empresa" disabled>
         <el-option
           v-for="item in empresaOptions"
           :key="item.value"
@@ -14,11 +14,11 @@
           :disabled="item.disabled"
         ></el-option>
       </el-select>
-      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-      <el-button @click="actualizarDatos">Actualizar</el-button>
+      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" disabled></el-date-picker>
+      <el-button @click="actualizarDatos" disabled>Actualizar</el-button>
     </el-card>
     <el-card class="box-card">
-      <div class="Success">PERIODO {{periodo}}</div>
+      <div class="Success">PERIODO: ACTUAL{{periodo}}</div>
     </el-card>
     <el-card class="box-card">
       <el-table
@@ -60,32 +60,32 @@ export default {
   data() {
     return {
       list: [],
-      periodo: null,
+      periodo: "",
       empresa: "1",
       empresaOptions: [
         {
           value: "1",
           label: "VALOT S.A.",
-          disabled: false
+          disabled: true
         },
         {
           value: "2",
           label: "HIGIENE 3000 S.A.",
-          disabled: false
+          disabled: true
         }
       ],
       listLoading: false
     };
   },
   created() {
-    this.fetchData('');
+    this.fetchData("");
   },
   methods: {
-    fetchData(parametros) {
-      const ENDPOINT = "WSDOTACTP";
+    fetchData(param) {
       this.listLoading = true;
+      const ENDPOINT = "WSDOTACTP";
       axios
-        .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
+        .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
           this.list = response.data.RRHH;
         })
@@ -100,12 +100,12 @@ export default {
     },
     actualizarDatos() {
       if (this.periodo !== null) {
-        const year = this.periodo.getFullYear();
-        const month = this.periodo.getMonth() + 1;
-        const empresa = this.empresa;
+        let year = this.periodo.getFullYear();
+        let month = this.periodo.getMonth() + 1;
+        let empresa = this.empresa;
         //const parametros = `?empresa=${empresa}&annio=${year}&mes=${month}`;
-        const parametros = "";
-        this.fetchData(parametros);
+        let para = "";
+        this.fetchData(para);
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
           type: "success",
