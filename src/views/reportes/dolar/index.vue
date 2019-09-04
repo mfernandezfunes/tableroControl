@@ -4,7 +4,9 @@
     <div>
       <h1>Dolar Histórico</h1>
     </div>
-    <highcharts :options="chartOptions" />
+    <el-card class="box-card">
+      <highcharts :options="chartOptions" />
+    </el-card>
   </div>
 </template>
 

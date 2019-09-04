@@ -4,21 +4,34 @@
       <h1>Cobranzas</h1>
       <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
     </div>
-    <div class="block">
-      <span class="demonstration">Mes</span>
-      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-      <el-button @click="actualizarDatos">Actualizar</el-button>
-      <el-button @click="actualizarGrafico">Graficar</el-button>
-      <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
-      <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
-    </div>
-    <highcharts :options="chartOptions"></highcharts>
+    <el-card class="box-card">
+      <div class="block">
+        <el-select v-model="empresa" placeholder="Seleccione la Empresa">
+          <el-option
+            v-for="item in empresaOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          ></el-option>
+        </el-select>
+        <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+        <el-button @click="actualizarDatos">Actualizar</el-button>
+        <el-button @click="actualizarGrafico">Graficar</el-button>
+        <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
+        <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
+      </div>
+    </el-card>
+    <el-card class="box-card">
+      <div>
+        <highcharts :options="chartOptions"></highcharts>
+      </div>
+    </el-card>
     <div>
       <el-table
         v-loading="listLoading"
         :data="list"
         :default-sort="{prop: 'fecha', order: 'ascending'}"
-        :summary-method="getSumatoria"
         show-summary
         element-loading-text="Cargando"
         empty-text="No se han recuperado datos del servidor"
@@ -51,9 +64,22 @@ import { isUndefined } from "util";
 export default {
   data() {
     return {
-      list: null,
-      listLoading: true,
+      list: [],
+      listLoading: false,
       periodo: null,
+      empresaOptions: [
+        {
+          value: "1",
+          label: "VALOT S.A.",
+          disabled: false
+        },
+        {
+          value: "2",
+          label: "HIGIENE 3000 S.A.",
+          disabled: true
+        }
+      ],
+      empresa: "1",
       chartOptions: {
         title: {
           text: "Histórico de Cobranzas"
@@ -63,6 +89,24 @@ export default {
           title: {
             text: "$ Pesos"
           }
+        },
+        legend: {
+          shadow: true,
+          verticalAlign: "bottom"
+        },
+        tooltip: {
+          shared: true,
+          followPointer: true
+        },
+        plotOptions: {
+          column: {
+            grouping: true,
+            shadow: false,
+            borderWidth: 0
+          }
+        },
+        credits: {
+          enabled: false
         },
         xAxis: {
           categories: [
@@ -106,7 +150,7 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    //this.fetchData();
   },
   methods: {
     imprimirDatos() {
@@ -129,35 +173,43 @@ export default {
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
           type: "success",
-          duration: 3 * 1000
+          duration: 5 * 1000
         });
         this.list = [];
       } else {
         Message({
           message: "Debe seleccionar un rango de fechas",
           type: "error",
-          duration: 3 * 1000
+          duration: 5 * 1000
         });
       }
     },
     actualizarGrafico() {
-      let fechas = [],
-        valores = [];
-      for (let dia of this.list) {
-        fechas.push(dia.FECCOBROUT);
-        valores.push(dia.TOTCOBROUT);
-      }
-      this.chartOptions.series.push({
-        name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
-        data: valores
-      });
-      console.log(valores);
+      if (this.periodo != null) {
+        let fechas = [],
+          valores = [];
+        for (let dia of this.list) {
+          fechas.push(dia.FECCOBROUT);
+          valores.push(dia.TOTCOBROUT);
+        }
+        this.chartOptions.series.push({
+          name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
+          data: valores
+        });
+        console.log(valores);
 
-      Message({
-        message: `Se solicito la actualizacion del ploteo del Gráfico`,
-        type: "success",
-        duration: 3 * 1000
-      });
+        Message({
+          message: `Se solicito la actualizacion del ploteo del Gráfico`,
+          type: "success",
+          duration: 5 * 1000
+        });
+      } else {
+        Message({
+          message: "Debe seleccionar un rango de fechas y presionar Actualizar",
+          type: "info",
+          duration: 5 * 1000
+        });
+      }
     },
     limpiarGrafico() {
       this.chartOptions.series = [];
@@ -227,5 +279,13 @@ export default {
 <style>
 .is-selected {
   color: #1989fa;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  padding: 18px, 18px, 18px, 18px;
 }
 </style>
