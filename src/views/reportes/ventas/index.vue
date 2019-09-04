@@ -6,7 +6,7 @@
     </div>
     <el-card class="box-card">
       <div class="block">
-        <el-select v-model="empresa" placeholder="Seleccione la Empresa">
+        <el-select v-model="empresa" placeholder="Seleccione la empresa">
           <el-option
             v-for="item in empresaOptions"
             :key="item.value"
@@ -15,6 +15,22 @@
             :disabled="item.disabled"
           ></el-option>
         </el-select>
+
+        <el-select
+          v-model="canalVenta"
+          multiple
+          collapse-tags
+          style="margin-left: 20px;"
+          placeholder="Seleccione el canal"
+        >
+          <el-option
+            v-for="item in canalVentasOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+
         <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" />
         <el-button @click="actualizarDatos">Actualizar</el-button>
         <el-button @click="actualizarGrafico">Graficar</el-button>
@@ -71,6 +87,7 @@ export default {
       list: [],
       listLoading: false,
       periodo: null,
+      empresa: "1",
       empresaOptions: [
         {
           value: "1",
@@ -83,7 +100,84 @@ export default {
           disabled: true
         }
       ],
-      empresa: "1",
+      canalVenta: [],
+      canalVentasOptions: [
+        {
+          value: "1",
+          label: "Institucionales Vendedores MoBiles",
+          disabled: false
+        },
+        {
+          value: "2",
+          label: "Grandes Clientes del Interior",
+          disabled: false
+        },
+        {
+          value: "3",
+          label: "Licitaciones",
+          disabled: false
+        },
+        {
+          value: "4",
+          label: "Exportaciones",
+          disabled: false
+        },
+        {
+          value: "5",
+          label: "Punto de Venta - Local Belgrano 1250",
+          disabled: true
+        },
+        {
+          value: "6",
+          label: "Consumo Interno",
+          disabled: true
+        },
+        {
+          value: "7",
+          label: "Institucionales CALL CENTER",
+          disabled: true
+        },
+        {
+          value: "8",
+          label: "Institucionales San Juan",
+          disabled: true
+        },
+        {
+          value: "9",
+          label: "Convertidores de Bobinas Industriales",
+          disabled: true
+        },
+        {
+          value: "10",
+          label: "Bienes de Uso",
+          disabled: true
+        },
+        {
+          value: "11",
+          label: "Personal",
+          disabled: true
+        },
+        {
+          value: "12",
+          label: "Canjes",
+          disabled: true
+        },
+        {
+          value: "13",
+          label: "La Bernalesa-PILB",
+          disabled: true
+        },
+        {
+          value: "14",
+          label: "Gdes. Clientes del Interior Cuentas R9*",
+          disabled: true
+        },
+        {
+          value: "15",
+          label: "PROMO VENTAS",
+          disabled: true
+        }
+      ],
       chartOptions: {
         title: {
           text: "Histórico de Facturación"
