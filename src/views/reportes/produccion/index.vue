@@ -17,6 +17,7 @@
         </el-select>
         <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
         <el-button @click="actualizarDatos">Actualizar</el-button>
+        <el-button @click="imprimirDatos">Imprimir datos</el-button>
       </div>
     </el-card>
 
@@ -36,18 +37,18 @@
           highlight-current-row
           style="width: 100%"
         >
-          <el-table-column align="center" prop="planta" label="Planta" sortable>
+          <el-table-column align="center" prop="planta" label="PLANTA" sortable>
             <template slot-scope="scope">
               <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column align="center" prop="producto" label="Producto">
+          <el-table-column align="center" prop="producto" label="PRODUCTO">
             <template slot-scope="scope">{{ toFirstUp(scope.row.PRODUCTO) }}</template>
           </el-table-column>
 
-          <el-table-column align="center" prop="total" label="Total">
-            <template slot-scope="scope">{{ scope.row.PRODUCCIONAC }}</template>
+          <el-table-column align="center" prop="total" label="TOTAL">
+            <template slot-scope="scope">{{ formatearPeso(scope.row.PRODUCCIONAC) }}</template>
           </el-table-column>
 
           <el-table-column align="center" prop="unidad" label="U/M">
@@ -98,35 +99,28 @@ export default {
     imprimirDatos() {
       console.log(this.list);
     },
-    limpiarGrafico() {
-      this.$alert("Funcion no implementada", "Info", {
-        confirmButtonText: "OK",
-        callback: action => {
-          this.$message({
-            type: "info",
-            message: `action: ${action}`
-          });
-        }
-      });
-    },
-    actualizarGrafico() {
-      let fechas = [],
-        valores = [];
-      for (let dia of this.list) {
-        fechas.push(dia.FECCOBROUT);
-        valores.push(dia.TOTCOBROUT);
-      }
-      this.chartOptions.series.push({
-        name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
-        data: valores
-      });
-      console.log(valores);
+    actualizarDatos() {
+      if (this.periodo !== null) {
+        this.list = null;
+        let year = this.periodo.getFullYear();
+        let month = this.periodo.getMonth() + 1;
+        let empresa = this.empresa;
+        let para = `?CodigoEmpresa=${empresa}&AnoProduccion=${year}&MesProduccion=${month}`;
+        this.fetchData(para);
 
-      Message({
-        message: `Se solicito la actualizacion del ploteo del Gráfico`,
-        type: "success",
-        duration: 3 * 1000
-      });
+        Message({
+          message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
+          type: "success",
+          duration: 5 * 1000
+        });
+        this.list = [];
+      } else {
+        Message({
+          message: "Debe seleccionar un rango de fechas",
+          type: "error",
+          duration: 5 * 1000
+        });
+      }
     },
     fetchData() {
       this.listLoading = true;
