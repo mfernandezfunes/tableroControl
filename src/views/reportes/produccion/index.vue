@@ -90,7 +90,7 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.fetchData("");
   },
   methods: {
     formatearPeso(valor) {
@@ -107,7 +107,6 @@ export default {
         let empresa = this.empresa;
         let para = `?CodigoEmpresa=${empresa}&AnoProduccion=${year}&MesProduccion=${month}`;
         this.fetchData(para);
-
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
           type: "success",
@@ -122,10 +121,11 @@ export default {
         });
       }
     },
-    fetchData() {
+    fetchData(param) {
       this.listLoading = true;
+      const ENDPOINT = "WSPROMESP";
       axios
-        .get(process.env.VUE_APP_AS400_API + "WSPROMESP")
+        .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
           let lista = response.data.PRODUCCIONACOU;
           this.list = this.convertToNumberAndClean(lista);
@@ -149,7 +149,7 @@ export default {
     },
     convertToNumberAndClean(lista) {
       const nuevaLista = [];
-      for (const elemento of lista) {
+      for (let elemento of lista) {
         elemento.PRODUCCIONAC = parseFloat(
           elemento.PRODUCCIONAC.replace(",", ".")
         );
@@ -186,12 +186,11 @@ export default {
             } else {
               return prev;
             }
-          }, 0); // + " kg"
+          }, 0);
         } else {
           sums[index] = "N/A";
         }
       });
-      //console.log(sums);
       return sums;
     }
   }
