@@ -5,6 +5,8 @@
       <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
     </div>
     <el-card class="box-card">
+      <div class="grid-content bg-purple">Controles</div>
+
       <div class="block">
         <el-select v-model="empresa" placeholder="Seleccione la Empresa">
           <el-option
@@ -32,15 +34,14 @@
               <el-table
                 v-loading="listLoading"
                 :data="list"
-                :default-sort="{prop: 'fecha', order: 'ascending'}"
                 show-summary
+                :summary-method="getSumatoria"
                 element-loading-text="Cargando"
                 empty-text="No se han recuperado datos del servidor"
                 border
-                fit
                 stripe
+                fit
                 highlight-current-row
-                height="400"
               >
                 <el-table-column align="center" prop="fecha" label="Fecha">
                   <template slot-scope="scope">
@@ -83,6 +84,7 @@ export default {
       list: [],
       listLoading: false,
       periodo: null,
+      empresa: "1",
       empresaOptions: [
         {
           value: "1",
@@ -95,7 +97,6 @@ export default {
           disabled: true
         }
       ],
-      empresa: "1",
       chartOptions: {
         title: {
           text: "Histórico de Cobranzas"
@@ -180,18 +181,31 @@ export default {
     },
     actualizarDatos() {
       if (this.periodo !== null) {
-        this.list = null;
+        this.list = [];
         let year = this.periodo.getFullYear();
         let month = this.periodo.getMonth() + 1;
-        let para = `?AnoCobranza=${year}&MesCobranza=${month}`;
-        this.fetchData(para);
-
-        Message({
-          message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-          type: "success",
-          duration: 5 * 1000
-        });
-        this.list = [];
+        let empresa = this.empresa;
+        let hoy = new Date();
+        if (
+          year > hoy.getFullYear() ||
+          (year >= hoy.getFullYear() && month > hoy.getMonth() + 1)
+        ) {
+          Message({
+            message:
+              "El período seleccionado no debe ser posterior a la fecha actual",
+            type: "error",
+            duration: 5 * 1000
+          });
+        } else {
+          let para = `?AnoCobranza=${year}&MesCobranza=${month}`;
+          this.fetchData(para);
+          Message({
+            message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
+            type: "success",
+            duration: 5 * 1000
+          });
+          this.list = [];
+        }
       } else {
         Message({
           message: "Debe seleccionar un rango de fechas",
@@ -212,7 +226,7 @@ export default {
           name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
           data: valores
         });
-        console.log(valores);
+        // console.log(valores);
 
         Message({
           message: `Se solicito la actualizacion del ploteo del Gráfico`,
@@ -242,7 +256,6 @@ export default {
         .then(response => {
           let lista = response.data.COBRODIARIOOU;
           this.list = this.convertToNumberAndClean(lista);
-          //console.log(this.list);
         })
         .catch(error => {
           Message({
@@ -258,11 +271,10 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "TOTAL";
+          sums[index] = "Costo total";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
-
         if (!values.every(value => isNaN(value))) {
           sums[index] =
             "$ " +
@@ -278,12 +290,13 @@ export default {
           sums[index] = "N/A";
         }
       });
+
       return sums;
     },
     convertToNumberAndClean(lista) {
       let nuevaLista = [];
       for (let elemento of lista) {
-        elemento.TOTCOBROUT = parseFloat(elemento.TOTCOBROUT.replace(",", "."));
+        elemento.TOTCOBROUT = elemento.TOTCOBROUT.replace(",", ".");
         if (elemento.PRODUCTO != "") nuevaLista.push(elemento);
       }
       return nuevaLista;
@@ -302,6 +315,6 @@ export default {
 }
 
 .box-card {
-  padding: 18px, 18px, 18px, 18px;
+  padding: 10px, 10px, 10px, 10px;
 }
 </style>

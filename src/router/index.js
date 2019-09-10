@@ -31,174 +31,183 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-  path: '/login',
-  component: () => import('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () => import('@/views/404'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/tablero',
-  children: [{
-    path: 'tablero',
-    name: 'Tablero',
-    component: () => import('@/views/dashboard/index'),
-    meta: {
-      title: 'Tablero',
-      icon: 'dashboard'
-    }
-  }]
-},
-{
-  path: '/reportes',
-  component: Layout,
-  redirect: '/reportes/table',
-  name: 'Reportes',
-  meta: {
-    title: 'Reportes',
-    icon: 'example'
-  },
-  children: [{
-    path: 'produccion',
-    name: 'Produccion',
-    component: () => import('@/views/reportes/produccion/index'),
-    meta: {
-      title: 'Produccion',
-      icon: 'tree'
-    }
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
   },
   {
-    path: 'ventas',
-    name: 'Ventas',
-    component: () => import('@/views/reportes/ventas/index'),
-    meta: {
-      title: 'Ventas',
-      icon: 'money'
-    }
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   },
   {
-    path: 'cobranzas',
-    name: 'Cobranzas',
-    component: () => import('@/views/reportes/cobranzas/index'),
-    meta: {
-      title: 'Cobranzas',
-      icon: 'money'
-    }
-  },
-  {
-    path: 'rrhh',
-    name: 'RRHH',
-    component: () => import('@/views/reportes/rrhh/index'),
-    meta: {
-      title: 'RRHH',
-      icon: 'people'
-    }
-  },
-  {
-    path: 'dolar',
-    name: 'Dolar',
-    component: () => import('@/views/reportes/dolar/index'),
-    meta: {
-      title: 'Dolar Historico',
-      icon: 'people'
-    }
-  }
-  ]
-},
-/*
-    {
-      path: '/form',
-      component: Layout,
-      children: [
-        {
-          path: 'index',
-          name: 'Form',
-          component: () => import('@/views/form/index'),
-          meta: { title: 'Form', icon: 'form' }
-        }
-      ]
-    },*/
-/*
-    {
-      path: '/nested',
-      component: Layout,
-      redirect: '/nested/menu1',
-      name: 'Nested',
+    path: '/',
+    component: Layout,
+    redirect: '/tablero',
+    children: [{
+      path: 'tablero',
+      name: 'Tablero',
+      component: () => import('@/views/dashboard/index'),
       meta: {
-        title: 'Nested',
-        icon: 'nested'
-      },
-      children: [
-        {
-          path: 'menu1',
-          component: () => import('@/views/nested/menu1/index'), // Parent router-view
-          name: 'Menu1',
-          meta: { title: 'Menu1' },
-          children: [
-            {
-              path: 'menu1-1',
-              component: () => import('@/views/nested/menu1/menu1-1'),
-              name: 'Menu1-1',
-              meta: { title: 'Menu1-1' }
-            },
-            {
-              path: 'menu1-2',
-              component: () => import('@/views/nested/menu1/menu1-2'),
-              name: 'Menu1-2',
-              meta: { title: 'Menu1-2' },
-              children: [
-                {
-                  path: 'menu1-2-1',
-                  component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                  name: 'Menu1-2-1',
-                  meta: { title: 'Menu1-2-1' }
-                },
-                {
-                  path: 'menu1-2-2',
-                  component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                  name: 'Menu1-2-2',
-                  meta: { title: 'Menu1-2-2' }
-                }
-              ]
-            },
-            {
-              path: 'menu1-3',
-              component: () => import('@/views/nested/menu1/menu1-3'),
-              name: 'Menu1-3',
-              meta: { title: 'Menu1-3' }
-            }
-          ]
-        },
-        {
-          path: 'menu2',
-          component: () => import('@/views/nested/menu2/index'),
-          meta: { title: 'menu2' }
-        }
-      ]
-    },
-  */
-{
-  path: 'external-link',
-  component: Layout,
-  children: [{
-    path: 'http://intranet.valot.com.ar/webmail',
+        title: 'Tablero',
+        icon: 'dashboard'
+      }
+    }]
+  },
+  {
+    path: '/reportes',
+    component: Layout,
+    redirect: '/reportes/table',
+    name: 'Reportes',
     meta: {
-      title: 'Webmail',
-      icon: 'link'
-    }
-  }]
-},
-// 404 page must be placed at the end !!!
-{
-  path: '*',
-  redirect: '/404',
-  hidden: true
-}
+      title: 'Reportes',
+      icon: 'example'
+    },
+    children: [{
+        path: 'produccion',
+        name: 'Produccion',
+        component: () => import('@/views/reportes/produccion/index'),
+        meta: {
+          title: 'Produccion',
+          icon: 'tree'
+        }
+      },
+      {
+        path: 'ventas',
+        name: 'Ventas',
+        component: () => import('@/views/reportes/ventas/index'),
+        meta: {
+          title: 'Ventas',
+          icon: 'money'
+        }
+      },
+      {
+        path: 'cobranzas',
+        name: 'Cobranzas',
+        component: () => import('@/views/reportes/cobranzas/index'),
+        meta: {
+          title: 'Cobranzas',
+          icon: 'money'
+        }
+      },
+      {
+        path: 'rrhh',
+        name: 'RRHH',
+        component: () => import('@/views/reportes/rrhh/index'),
+        meta: {
+          title: 'RRHH',
+          icon: 'people'
+        }
+      },
+      {
+        path: 'dolar',
+        name: 'Dólar',
+        component: () => import('@/views/reportes/dolar/index'),
+        meta: {
+          title: 'Dólar',
+          icon: 'people'
+        }
+      },
+      {
+        path: 'riesgopais',
+        name: 'Riesgo País',
+        component: () => import('@/views/reportes/riesgopais/index'),
+        meta: {
+          title: 'Riesgo País',
+          icon: 'people'
+        }
+      }
+    ]
+  },
+  /*
+      {
+        path: '/form',
+        component: Layout,
+        children: [
+          {
+            path: 'index',
+            name: 'Form',
+            component: () => import('@/views/form/index'),
+            meta: { title: 'Form', icon: 'form' }
+          }
+        ]
+      },*/
+  /*
+      {
+        path: '/nested',
+        component: Layout,
+        redirect: '/nested/menu1',
+        name: 'Nested',
+        meta: {
+          title: 'Nested',
+          icon: 'nested'
+        },
+        children: [
+          {
+            path: 'menu1',
+            component: () => import('@/views/nested/menu1/index'), // Parent router-view
+            name: 'Menu1',
+            meta: { title: 'Menu1' },
+            children: [
+              {
+                path: 'menu1-1',
+                component: () => import('@/views/nested/menu1/menu1-1'),
+                name: 'Menu1-1',
+                meta: { title: 'Menu1-1' }
+              },
+              {
+                path: 'menu1-2',
+                component: () => import('@/views/nested/menu1/menu1-2'),
+                name: 'Menu1-2',
+                meta: { title: 'Menu1-2' },
+                children: [
+                  {
+                    path: 'menu1-2-1',
+                    component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+                    name: 'Menu1-2-1',
+                    meta: { title: 'Menu1-2-1' }
+                  },
+                  {
+                    path: 'menu1-2-2',
+                    component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+                    name: 'Menu1-2-2',
+                    meta: { title: 'Menu1-2-2' }
+                  }
+                ]
+              },
+              {
+                path: 'menu1-3',
+                component: () => import('@/views/nested/menu1/menu1-3'),
+                name: 'Menu1-3',
+                meta: { title: 'Menu1-3' }
+              }
+            ]
+          },
+          {
+            path: 'menu2',
+            component: () => import('@/views/nested/menu2/index'),
+            meta: { title: 'menu2' }
+          }
+        ]
+      },
+    */
+  {
+    path: 'external-link',
+    component: Layout,
+    children: [{
+      path: 'http://intranet.valot.com.ar/webmail',
+      meta: {
+        title: 'Webmail',
+        icon: 'link'
+      }
+    }]
+  },
+  // 404 page must be placed at the end !!!
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 const createRouter = () => new Router({

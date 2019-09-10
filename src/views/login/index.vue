@@ -12,7 +12,7 @@
         <img v-if="logo" :src="logo" class="logo">
       </div>
       <div class="title-container">
-        <h3 class="title">Ingreso</h3>
+        <h3 class="title">Ingreso al Sistema</h3>
       </div>
 
       <el-form-item prop="username">

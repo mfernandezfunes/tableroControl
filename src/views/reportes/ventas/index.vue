@@ -56,7 +56,6 @@
                 fit
                 stripe
                 highlight-current-row
-                height="400"
               >
                 <el-table-column align="center" prop="fecha" label="FECHA">
                   <template slot-scope="scope">
@@ -282,17 +281,31 @@ export default {
     },
     actualizarDatos() {
       if (this.periodo !== null) {
-        const year = this.periodo.getFullYear();
-        const month = this.periodo.getMonth() + 1;
-        const empresa = this.empresa;
-        const para = `?CodigoEmpresa=${empresa}&AnoFacturacion=${year}&MesFacturacion=${month}`;
-        this.fetchData(para);
-        Message({
-          message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-          type: "success",
-          duration: 5 * 1000
-        });
         this.list = [];
+        let year = this.periodo.getFullYear();
+        let month = this.periodo.getMonth() + 1;
+        let empresa = this.empresa;
+        let hoy = new Date();
+        if (
+          year > hoy.getFullYear() ||
+          (year >= hoy.getFullYear() && month > hoy.getMonth() + 1)
+        ) {
+          Message({
+            message:
+              "El período seleccionado no debe ser posterior a la fecha actual",
+            type: "error",
+            duration: 5 * 1000
+          });
+        } else {
+          let para = `?CodigoEmpresa=${empresa}&AnoFacturacion=${year}&MesFacturacion=${month}`;
+          this.fetchData(para);
+          Message({
+            message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
+            type: "success",
+            duration: 5 * 1000
+          });
+          this.list = [];
+        }
       } else {
         Message({
           message: "Debe seleccionar un rango de fechas",
@@ -331,6 +344,7 @@ export default {
     fetchData(periodo) {
       const ENDPOINT = "WSFACDIAP";
       this.listLoading = true;
+      this.list = null;
       let fechas = "";
       if (!isUndefined(periodo)) fechas = periodo;
 
@@ -344,7 +358,8 @@ export default {
           Message({
             message: "SE HA DETECTADO UN ERROR: " + error.message,
             type: "error",
-            duration: 5 * 1000
+            duration: 5 *
+             1000
           });
         })
         .finally(() => (this.listLoading = false));
@@ -378,7 +393,6 @@ export default {
     },
     convertToNumberAndClean(lista) {
       let nuevaLista = [];
-      console.log(lista);
       for (let elemento of lista) {
         elemento.TOTFACTOUT = parseFloat(elemento.TOTFACTOUT.replace(",", "."));
         nuevaLista.push(elemento);

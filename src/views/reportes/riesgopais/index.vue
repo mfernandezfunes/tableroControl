@@ -2,7 +2,7 @@
 <template>
   <div class="app-container">
     <div>
-      <h1>Dolar Anual</h1>
+      <h1>Riesgo País</h1>
     </div>
     <el-card class="box-card">
       <highcharts :options="chartOptions" />
@@ -19,10 +19,9 @@ export default {
     return {
       list: null,
       error: null,
-
       chartOptions: {
         title: {
-          text: "Cotización Anual"
+          text: "Riesgo País Anual"
         },
         legend: {
           shadow: true,
@@ -44,11 +43,11 @@ export default {
         },
         series: [],
         subtitle: {
-          text: "Fuente: Ambito Financiero"
+          text: "Fuente: EMBI, elaborado por JP Morgan"
         },
         yAxis: {
           title: {
-            text: "$ Pesos"
+            text: "Puntos"
           }
         },
         xAxis: {
@@ -66,7 +65,7 @@ export default {
   methods: {
     fetchData: function() {
       axios
-        .get(process.env.VUE_APP_DOLAR_API)
+        .get(process.env.VUE_APP_RIESGO_API)
         .then(response => {
           this.list = response.data;
           this.getSeries();
@@ -85,27 +84,19 @@ export default {
       let resultados = [];
       resultados = this.list;
       let fechas = [],
-        serie1 = [],
-        serie2 = [];
+        serie1 = [];
       for (let item of resultados) {
         fechas.push(item["0"]);
         serie1.push(item["1"]);
-        serie2.push(item["2"]);
       }
       fechas.shift();
       serie1.shift();
-      serie2.shift();
 
       this.chartOptions.xAxis.categories.push(...fechas);
 
       this.chartOptions.series.push(
         JSON.parse(
-          `{ "name": "Dólar Oficial", "data": [ ${serie1} ], "color": "#00FF00" }`
-        )
-      );
-      this.chartOptions.series.push(
-        JSON.parse(
-          `{ "name": "Dólar Informal", "data": [ ${serie2} ], "color": "#FF0000" }`
+          `{ "name": "Riesgo País", "type": "area","data": [ ${serie1} ], "color": "#bbb" }`
         )
       );
     }
