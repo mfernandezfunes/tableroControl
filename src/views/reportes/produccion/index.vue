@@ -128,7 +128,7 @@ export default {
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
-          this.list = response.data.PRODUCCION;
+          this.list = this.limpiarLista(response.data.PRODUCCION);
           this.sumaTotal = this.sumatoria(this.list);
         })
         .catch(error => {
@@ -182,6 +182,15 @@ export default {
         }
       });
       return sums;
+    },
+    limpiarLista(lista) {
+      let nuevaLista = [];
+      for (let elemento of lista) {
+        if (elemento.PRODUCTO != "") {
+          nuevaLista.push(elemento);
+        }
+      }
+      return nuevaLista;
     }
   }
 };
