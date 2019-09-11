@@ -57,14 +57,14 @@
                 stripe
                 highlight-current-row
               >
-                <el-table-column align="center" prop="fecha" label="FECHA">
+                <el-table-column align="center" prop="fecha" label="Fecha">
                   <template slot-scope="scope">
-                    <span>{{ formatearFecha(scope.row.FECFACTOUT) }}</span>
+                    <span>{{ formatearFecha(scope.row.FECHA) }}</span>
                   </template>
                 </el-table-column>
 
-                <el-table-column align="center" prop="importe" label="MONTO">
-                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTFACTOUT) }}</template>
+                <el-table-column align="center" prop="importe" label="Subtotal">
+                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTAL) }}</template>
                 </el-table-column>
               </el-table>
             </div>
@@ -297,7 +297,7 @@ export default {
             duration: 5 * 1000
           });
         } else {
-          let para = `?CodigoEmpresa=${empresa}&AnoFacturacion=${year}&MesFacturacion=${month}`;
+          let para = `?empresa=${empresa}&annio=${year}&mes=${month}`;
           this.fetchData(para);
           Message({
             message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
@@ -319,8 +319,8 @@ export default {
         let fechas = [],
           valores = [];
         for (let dia of this.list) {
-          fechas.push(dia.FECFACTOUT);
-          valores.push(dia.TOTFACTOUT);
+          fechas.push(dia.FECHA);
+          valores.push(dia.TOTAL);
         }
         this.chartOptions.series.push({
           name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
@@ -351,15 +351,14 @@ export default {
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
-          let lista = response.data.FACTUDIARIOOU;
-          this.list = this.convertToNumberAndClean(lista);
+          let lista = response.data.FACTURACION;
+          this.list = lista;
         })
         .catch(error => {
           Message({
             message: "SE HA DETECTADO UN ERROR: " + error.message,
             type: "error",
-            duration: 5 *
-             1000
+            duration: 5 * 1000
           });
         })
         .finally(() => (this.listLoading = false));
@@ -369,7 +368,7 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "TOTAL";
+          sums[index] = "Total";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
@@ -390,14 +389,6 @@ export default {
         }
       });
       return sums;
-    },
-    convertToNumberAndClean(lista) {
-      let nuevaLista = [];
-      for (let elemento of lista) {
-        elemento.TOTFACTOUT = parseFloat(elemento.TOTFACTOUT.replace(",", "."));
-        nuevaLista.push(elemento);
-      }
-      return nuevaLista;
     }
   }
 };

@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import HighchartsVue from 'highcharts-vue'
+import i18n from './i18n'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import locale from 'element-ui/lib/locale/lang/es' // lang i18n
 
 import '@/styles/index.scss' // global css
 
@@ -25,19 +26,25 @@ import '@/permission' // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online! ! !
  */
-import { mockXHR } from '../mock'
+import {
+  mockXHR
+} from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
-// set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+
+// set ElementUI lang to ES or EN
+Vue.use(ElementUI, {
+  locale
+})
 
 Vue.use(HighchartsVue)
 
 Vue.config.productionTip = false
 
 new Vue({
+  i18n,
   el: '#app',
   router,
   store,

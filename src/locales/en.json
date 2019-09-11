@@ -1,0 +1,43 @@
+{
+	"btn": {
+		"clean-graph": "Clean Graph",
+		"draw": "Graph",
+		"no-button": "No",
+		"send-console": "Print Data in Console",
+		"update": "Update",
+		"yes-button": "Yes"
+	},
+	"date": "Date",
+	"day": "day",
+	"form": {
+		"select": {
+			"company": "Select the company",
+			"period": "Select a period"
+		}
+	},
+	"month": "month",
+	"msg": {
+		"month-post": "The selected month must not be after the current date",
+		"no-data": "No data was retrieved from the server",
+		"period-post": "The selected period must not be after the current date"
+	},
+	"tables": {
+		"txt": {
+			"actual": "Current",
+			"amount": "Amount",
+			"ausentes": "Missing",
+			"dashboard": "Dashboard",
+			"date": "Date",
+			"dotacion": "Endowment",
+			"period": "Period",
+			"planta": "Plant",
+			"product": "Product",
+			"reportes": "Reports",
+			"tarde": "Late Arrival",
+			"total": "Total",
+			"um": "mu"
+		}
+	},
+	"total-charged": "Total charged",
+	"welcome": "Welcome!"
+}

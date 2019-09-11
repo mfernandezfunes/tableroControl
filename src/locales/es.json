@@ -1,0 +1,43 @@
+{
+	"btn": {
+		"clean-graph": "Limpiar Gráfico",
+		"draw": "Graficar",
+		"no-button": "No",
+		"send-console": "Imprimir Datos en Consola",
+		"update": "Actualizar",
+		"yes-button": "Si"
+	},
+	"date": "Fecha",
+	"day": "día",
+	"form": {
+		"select": {
+			"company": "Seleccione la empresa",
+			"period": "Seleccione un período"
+		}
+	},
+	"month": "mes",
+	"msg": {
+		"month-post": "El mes seleccionado no debe ser posterior a la fecha actual",
+		"no-data": "No se han recuperado datos del servidor",
+		"period-post": "El período seleccionado no debe ser posterior a la fecha actual"
+	},
+	"tables": {
+		"txt": {
+			"actual": "Actual",
+			"amount": "Monto",
+			"ausentes": "Ausentes",
+			"dashboard": "Tablero de mando",
+			"date": "Fecha",
+			"dotacion": "Dotación",
+			"period": "Período",
+			"planta": "Planta",
+			"product": "Producto",
+			"reportes": "Reportes",
+			"tarde": "Llegada Tarde",
+			"total": "Total",
+			"um": "um"
+		}
+	},
+	"total-charged": "Total Cobrado",
+	"welcome": "Bienvenido!"
+}

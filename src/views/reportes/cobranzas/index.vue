@@ -8,7 +8,7 @@
       <div class="grid-content bg-purple">Controles</div>
 
       <div class="block">
-        <el-select v-model="empresa" placeholder="Seleccione la Empresa">
+        <el-select v-model="empresa" placeholder="Seleccione la empresa">
           <el-option
             v-for="item in empresaOptions"
             :key="item.value"
@@ -19,10 +19,10 @@
         </el-select>
 
         <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-        <el-button @click="actualizarDatos">Actualizar</el-button>
-        <el-button @click="actualizarGrafico">Graficar</el-button>
-        <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
-        <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
+        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+        <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
+        <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
+        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
       </div>
     </el-card>
 
@@ -45,12 +45,12 @@
               >
                 <el-table-column align="center" prop="fecha" label="Fecha">
                   <template slot-scope="scope">
-                    <span>{{ formatearFecha(scope.row.FECCOBROUT) }}</span>
+                    <span>{{ formatearFecha(scope.row.FECHA) }}</span>
                   </template>
                 </el-table-column>
 
-                <el-table-column align="center" prop="importe" label="Total Cobrado">
-                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTCOBROUT) }}</template>
+                <el-table-column align="center" prop="importe" label="Subtotal">
+                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTAL) }}</template>
                 </el-table-column>
               </el-table>
             </div>
@@ -192,12 +192,12 @@ export default {
         ) {
           Message({
             message:
-              "El período seleccionado no debe ser posterior a la fecha actual",
+              "El mes seleccionado no debe ser posterior a la fecha actual",
             type: "error",
             duration: 5 * 1000
           });
         } else {
-          let para = `?AnoCobranza=${year}&MesCobranza=${month}`;
+          let para = `?annio=${year}&mes=${month}`;
           this.fetchData(para);
           Message({
             message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
@@ -218,15 +218,14 @@ export default {
       if (this.periodo != null) {
         let fechas = [],
           valores = [];
-        for (let dia of this.list) {
-          fechas.push(dia.FECCOBROUT);
-          valores.push(dia.TOTCOBROUT);
+        for (let item of this.list) {
+          fechas.push(item.FECHA);
+          valores.push(item.TOTAL);
         }
         this.chartOptions.series.push({
           name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
           data: valores
         });
-        // console.log(valores);
 
         Message({
           message: `Se solicito la actualizacion del ploteo del Gráfico`,
@@ -247,15 +246,13 @@ export default {
     fetchData(periodo) {
       const ENDPOINT = "WSCOBDIAP";
       this.listLoading = true;
-      this.list = null;
+      this.list = [];
       let fechas = "";
       if (!isUndefined(periodo)) fechas = periodo;
-
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
-          let lista = response.data.COBRODIARIOOU;
-          this.list = this.convertToNumberAndClean(lista);
+          this.list = this.limpiarLista(response.data.COBRANZAS);
         })
         .catch(error => {
           Message({
@@ -271,11 +268,13 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "Costo total";
+          sums[index] = "Total";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
+          console.log(values);
+
           sums[index] =
             "$ " +
             values.reduce((prev, curr) => {
@@ -293,11 +292,12 @@ export default {
 
       return sums;
     },
-    convertToNumberAndClean(lista) {
+    limpiarLista(lista) {
       let nuevaLista = [];
       for (let elemento of lista) {
-        elemento.TOTCOBROUT = elemento.TOTCOBROUT.replace(",", ".");
-        if (elemento.PRODUCTO != "") nuevaLista.push(elemento);
+        if (elemento.FECHA != "") {
+          nuevaLista.push(elemento);
+        }
       }
       return nuevaLista;
     }

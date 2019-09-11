@@ -16,8 +16,8 @@
           ></el-option>
         </el-select>
         <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-        <el-button @click="actualizarDatos">Actualizar</el-button>
-        <el-button @click="imprimirDatos">Imprimir datos</el-button>
+        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
       </div>
     </el-card>
 
@@ -48,7 +48,7 @@
           </el-table-column>
 
           <el-table-column align="center" prop="total" label="TOTAL">
-            <template slot-scope="scope">{{ formatearPeso(scope.row.PRODUCCIONAC) }}</template>
+            <template slot-scope="scope">{{ formatearPeso(scope.row.TOTAL) }}</template>
           </el-table-column>
 
           <el-table-column align="center" prop="unidad" label="U/M">
@@ -105,7 +105,7 @@ export default {
         let year = this.periodo.getFullYear();
         let month = this.periodo.getMonth() + 1;
         let empresa = this.empresa;
-        let para = `?CodigoEmpresa=${empresa}&AnoProduccion=${year}&MesProduccion=${month}`;
+        let para = `?empresa=${empresa}&annio=${year}&mes=${month}`;
 
         this.fetchData(para);
         Message({
@@ -128,8 +128,7 @@ export default {
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
-          let lista = response.data.PRODUCCIONACOU;
-          this.list = this.convertToNumberAndClean(lista);
+          this.list = response.data.PRODUCCION;
           this.sumaTotal = this.sumatoria(this.list);
         })
         .catch(error => {
@@ -144,19 +143,9 @@ export default {
     sumatoria(lista) {
       let sumaTotal = 0;
       for (const item of lista) {
-        sumaTotal += item.PRODUCCIONAC;
+        sumaTotal += item.TOTAL;
       }
       return sumaTotal;
-    },
-    convertToNumberAndClean(lista) {
-      const nuevaLista = [];
-      for (let elemento of lista) {
-        elemento.PRODUCCIONAC = parseFloat(
-          elemento.PRODUCCIONAC.replace(",", ".")
-        );
-        if (elemento.PRODUCTO != "") nuevaLista.push(elemento);
-      }
-      return nuevaLista;
     },
     toFirstUp(cadena) {
       if (typeof cadena == "string") {
