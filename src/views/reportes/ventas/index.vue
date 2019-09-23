@@ -6,7 +6,7 @@
     </div>
     <el-card class="box-card">
       <div class="block">
-        <el-select v-model="empresa" placeholder="Seleccione la empresa">
+        <el-select v-model="empresa" :placeholder="$t('form.select.company')">
           <el-option
             v-for="item in empresaOptions"
             :key="item.value"
@@ -21,7 +21,7 @@
           multiple
           collapse-tags
           style="margin-left: 20px;"
-          placeholder="Seleccione el canal"
+          :placeholder="$t('form.select.channel')"
         >
           <el-option
             v-for="item in canalVentasOptions"
@@ -31,11 +31,11 @@
           ></el-option>
         </el-select>
 
-        <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" />
-        <el-button @click="actualizarDatos">Actualizar</el-button>
-        <el-button @click="actualizarGrafico">Graficar</el-button>
-        <el-button @click="limpiarGrafico">Limpiar Grafico</el-button>
-        <el-button @click="imprimirDatos">Imprimir Datos en Consola</el-button>
+        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')" />
+        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+        <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
+        <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
+        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
       </div>
     </el-card>
 
@@ -47,23 +47,27 @@
               <el-table
                 v-loading="listLoading"
                 :data="list"
-                :default-sort="{prop: 'fecha', order: 'ascending'}"
                 :summary-method="getSumatoria"
+                :row-class-name="tableRowClassName"
                 show-summary
-                element-loading-text="Cargando"
-                empty-text="No se han recuperado datos del servidor"
+                :element-loading-text="$t('msg.loading')"
+                :empty-text="$t('msg.no-data')"
                 border
                 fit
-                stripe
-                highlight-current-row
               >
-                <el-table-column align="center" prop="fecha" label="Fecha">
+                <el-table-column align="center" prop="weekDay" :label="$t('tables.txt.weekDay')">
+                  <template slot-scope="scope">
+                    <span>{{ retornaSemana(scope.row.FECHA) }}</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="center" prop="fecha" :label="$t('tables.txt.date')">
                   <template slot-scope="scope">
                     <span>{{ formatearFecha(scope.row.FECHA) }}</span>
                   </template>
                 </el-table-column>
 
-                <el-table-column align="center" prop="importe" label="Subtotal">
+                <el-table-column align="center" prop="importe" :label="$t('tables.txt.subtot')">
                   <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTAL) }}</template>
                 </el-table-column>
               </el-table>
@@ -87,6 +91,7 @@
 <script>
 import axios from "axios";
 import numeral from "numeral";
+import moment from "moment";
 import { MessageBox, Message } from "element-ui";
 import { isUndefined } from "util";
 
@@ -97,6 +102,15 @@ export default {
       listLoading: false,
       periodo: null,
       empresa: "1",
+      diaSemana: [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado"
+      ],
       empresaOptions: [
         {
           value: "1",
@@ -266,6 +280,10 @@ export default {
     formatearPeso(valor) {
       return numeral(valor).format("0,0.00");
     },
+    retornaSemana(fecha) {
+      let dia = moment(fecha).day();
+      return this.diaSemana[dia];
+    },
     formatearFecha(fecha) {
       let fechaFormateada = "";
       if (fecha !== "") {
@@ -301,7 +319,7 @@ export default {
           this.fetchData(para);
           Message({
             message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-            type: "success",
+            type: "info",
             duration: 5 * 1000
           });
           this.list = [];
@@ -326,8 +344,6 @@ export default {
           name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
           data: valores
         });
-        console.log(valores);
-
         Message({
           message: `Se solicito la actualizacion del ploteo del Gráfico`,
           type: "success",
@@ -347,7 +363,6 @@ export default {
       this.list = null;
       let fechas = "";
       if (!isUndefined(periodo)) fechas = periodo;
-
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
@@ -372,7 +387,6 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[column.property]));
-
         if (!values.every(value => isNaN(value))) {
           sums[index] =
             "$ " +
@@ -389,6 +403,13 @@ export default {
         }
       });
       return sums;
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (row.FECHA == "") {
+        return "warning-row";
+      } else {
+        return "success-row";
+      }
     }
   }
 };
@@ -397,7 +418,12 @@ export default {
 .item {
   padding: 18px 0;
 }
-
+.el-table .warning-row {
+  background: black;
+}
+.el-table .success-row {
+  background: lavender;
+}
 .box-card {
   padding: 18px 0;
   weight: 50%;

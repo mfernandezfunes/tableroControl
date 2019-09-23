@@ -69,7 +69,7 @@ export const constantRoutes = [{
         component: () => import('@/views/reportes/produccion/index'),
         meta: {
           title: 'Produccion',
-          icon: 'tree'
+          icon: 'pie-chart'
         }
       },
       {
@@ -78,7 +78,7 @@ export const constantRoutes = [{
         component: () => import('@/views/reportes/ventas/index'),
         meta: {
           title: 'Ventas',
-          icon: 'money'
+          icon: 'pie-chart'
         }
       },
       {
@@ -87,7 +87,7 @@ export const constantRoutes = [{
         component: () => import('@/views/reportes/cobranzas/index'),
         meta: {
           title: 'Cobranzas',
-          icon: 'money'
+          icon: 'pie-chart'
         }
       },
       {

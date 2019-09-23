@@ -15,39 +15,46 @@
         ></el-option>
       </el-select>
       <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" disabled></el-date-picker>
-      <el-button @click="actualizarDatos" disabled>Actualizar</el-button>
+      <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
     </el-card>
     <el-card class="box-card">
-      <div class="Success">PERIODO: ACTUAL{{periodo}}</div>
+      <div class="Success">PERIODO: ACTUAL {{periodo}}</div>
     </el-card>
     <el-card class="box-card">
-      <el-table
-        v-loading="listLoading"
-        :data="list"
-        element-loading-text="Cargando"
-        :summary-method="getSumatoria"
-        border
-        fit
-        show-summary
-        empty-text="No se han recuperado datos del servidor"
-        stripe
-        highlight-current-row
-        style="width: 50%"
-      >
-        <el-table-column align="center" prop="planta" label="PLANTA">
-          <template slot-scope="scope">
-            <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
-          </template>
-        </el-table-column>
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <el-table
+            v-loading="listLoading"
+            :data="list"
+            element-loading-text="Cargando"
+            :summary-method="getSummaries"
+            border
+            fit
+            show-summary
+            empty-text="No se han recuperado datos del servidor"
+            stripe
+            highlight-current-row
+            style="width: 50%"
+          >
+            <el-table-column align="center" prop="planta" label="PLANTA">
+              <template slot-scope="scope">
+                <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
+              </template>
+            </el-table-column>
 
-        <el-table-column align="center" prop="dotacion" label="DOTACION">
-          <template slot-scope="scope">{{ scope.row.DOTACION }}</template>
-        </el-table-column>
+            <el-table-column align="center" prop="dotacion" label="DOTACION">
+              <template slot-scope="scope">{{ scope.row.DOTACION }}</template>
+            </el-table-column>
 
-        <el-table-column align="center" prop="dotacion" label="AUSENTES">
-          <template slot-scope="scope">{{ scope.row.AUSENTES }}</template>
-        </el-table-column>
-      </el-table>
+            <el-table-column align="center" prop="dotacion" label="AUSENTES">
+              <template slot-scope="scope">{{ scope.row.AUSENTES }}</template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="8">
+          <!-- pie-chart /-->
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -55,8 +62,12 @@
 <script>
 import axios from "axios";
 import { MessageBox, Message } from "element-ui";
+import PieChart from "@/views/dashboard/components/PieChart";
 
 export default {
+  components: {
+    PieChart
+  },
   data() {
     return {
       list: [],
@@ -81,7 +92,7 @@ export default {
     this.fetchData("");
   },
   methods: {
-    fetchData(param) {
+    async fetchData(param) {
       this.listLoading = true;
       const ENDPOINT = "WSDOTACTP";
       axios
@@ -115,7 +126,7 @@ export default {
       } else {
         Message({
           message: "Debe seleccionar un rango de fechas",
-          type: "error",
+          type: "info",
           duration: 5 * 1000
         });
       }
@@ -139,6 +150,32 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[column.property]));
+        console.log(values);
+        if (values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            console.log("Pre: " + Number(prev) + " Cur: " + Number(curr));
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        } else {
+          sums[index] = "N/A";
+        }
+      });
+      return sums;
+    },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "Total";
+          return;
+        }
+        const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
           sums[index] =
             "$ " +
@@ -154,9 +191,20 @@ export default {
           sums[index] = "N/A";
         }
       });
-
       return sums;
     }
   }
 };
 </script>
+<style>
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+</style>

@@ -8,7 +8,7 @@
       <div class="grid-content bg-purple">{{ $t("msg.controls") }}</div>
 
       <div class="block">
-        <el-select v-model="empresa" :placeholder="$t('form.select.month')">
+        <el-select v-model="empresa" :placeholder="$t('form.select.company')">
           <el-option
             v-for="item in empresaOptions"
             :key="item.value"
@@ -43,13 +43,19 @@
                 fit
                 highlight-current-row
               >
-                <el-table-column align="center" prop="fecha" label="Fecha">
+                <el-table-column align="center" prop="weekDay" :label="$t('tables.txt.weekDay')">
+                  <template slot-scope="scope">
+                    <span>{{ retornaSemana(scope.row.FECHA) }}</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column align="center" prop="fecha" :label="$t('tables.txt.date')">
                   <template slot-scope="scope">
                     <span>{{ formatearFecha(scope.row.FECHA) }}</span>
                   </template>
                 </el-table-column>
 
-                <el-table-column align="center" prop="importe" label="Subtotal">
+                <el-table-column align="center" prop="importe" :label="$t('tables.txt.subtot')">
                   <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTAL) }}</template>
                 </el-table-column>
               </el-table>
@@ -75,6 +81,7 @@
 <script>
 import axios from "axios";
 import numeral from "numeral";
+import moment from "moment";
 import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
 
@@ -84,6 +91,15 @@ export default {
       list: [],
       listLoading: false,
       periodo: null,
+      diaSemana: [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado"
+      ],
       empresa: "1",
       empresaOptions: [
         {
@@ -176,6 +192,10 @@ export default {
     formatearPeso(valor) {
       return numeral(valor).format("0,0.00");
     },
+    retornaSemana(fecha) {
+      let dia = moment(fecha).day();
+      return this.diaSemana[dia];
+    },
     formatearFecha(fecha) {
       return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     },
@@ -201,7 +221,7 @@ export default {
           this.fetchData(para);
           Message({
             message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-            type: "success",
+            type: "info",
             duration: 5 * 1000
           });
           this.list = [];

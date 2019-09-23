@@ -12,13 +12,14 @@
 
 <script>
 import axios from "axios";
-import { Message } from "element-ui";
+import { Message, Loading } from "element-ui";
 
 export default {
   data() {
     return {
       list: null,
       error: null,
+      fullscreenLoading: false,
 
       chartOptions: {
         title: {
@@ -65,6 +66,12 @@ export default {
   },
   methods: {
     fetchData: function() {
+      const loading = this.$loading({
+        lock: true,
+        text: "Cargando..",
+        spinner: "el-icon-loading",
+        background: "rgba(255, 255, 255, 0.7)"
+      });
       axios
         .get(process.env.VUE_APP_DOLAR_API)
         .then(response => {
@@ -79,7 +86,7 @@ export default {
           });
           return Promise.reject(error);
         })
-        .finally(() => (this.listLoading = false));
+        .finally(() => loading.close());
     },
     getSeries() {
       let resultados = [];

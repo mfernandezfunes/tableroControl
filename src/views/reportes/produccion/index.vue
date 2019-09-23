@@ -27,13 +27,11 @@
           v-loading="listLoading"
           :data="list"
           :default-sort="{prop: 'planta', order: 'ascending'}"
+          :summary-method="getSummaries"
+          show-summary
           element-loading-text="Cargando aguarde..."
           border
           empty-text="No se han recuperado datos del servidor"
-          stripe
-          show-summary
-          :summary-method="getSumatoria"
-          fit
           highlight-current-row
           style="width: 100%"
         >
@@ -71,8 +69,9 @@ export default {
   data() {
     return {
       list: [],
+      date: null,
       sumaTotal: 0,
-      listLoading: true,
+      listLoading: false,
       periodo: null,
       empresaOptions: [
         {
@@ -91,6 +90,14 @@ export default {
   },
   created() {
     this.fetchData("");
+
+    this.date = new Date();
+    this.date.setDate(this.date.getDate() - 1);
+    while (!this.isBusinessDay(this.date)) {
+      this.date.setDate(this.date.getDate() - 1);
+    }
+
+    console.log(this.date); //date always between monday to friday
   },
   methods: {
     formatearPeso(valor) {
@@ -98,6 +105,10 @@ export default {
     },
     imprimirDatos() {
       console.log(this.list);
+    },
+    retornaSemana(fecha) {
+      let dia = moment(fecha).day();
+      return this.diaSemana[dia];
     },
     actualizarDatos() {
       if (this.periodo !== null) {
@@ -110,7 +121,7 @@ export default {
         this.fetchData(para);
         Message({
           message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
-          type: "success",
+          type: "info",
           duration: 5 * 1000
         });
         this.list = [];
@@ -157,30 +168,31 @@ export default {
         return pieces.join(" ");
       }
     },
-    getSumatoria(param) {
-      var { columns, data } = param;
-      var sums = [];
-
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "TOTAL";
+          sums[index] = "Total";
           return;
         }
-        var values = data.map(item => Number(item[column.property]));
-        console.log();
+        const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            var value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
+          sums[index] =
+            "$ " +
+            values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
         } else {
           sums[index] = "N/A";
         }
       });
+
       return sums;
     },
     limpiarLista(lista) {
@@ -191,6 +203,13 @@ export default {
         }
       }
       return nuevaLista;
+    },
+    isBusinessDay(date) {
+      var day = date.getDay();
+      if (day == 0 || day == 6) {
+        return false;
+      }
+      return true;
     }
   }
 };

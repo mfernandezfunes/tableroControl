@@ -73,9 +73,10 @@ import PieChart from "./components/PieChart";
 import BarChart from "./components/BarChart";
 // import TransactionTable from './components/TransactionTable'
 // import TodoList from './components/TodoList'
-// import BoxCard from "./components/BoxCard";
+import BoxCard from "./components/BoxCard";
 
 const lineChartData = {
+  // Datos
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
     actualData: [120, 82, 91, 154, 162, 140, 145]
