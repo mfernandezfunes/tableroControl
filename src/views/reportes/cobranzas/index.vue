@@ -5,10 +5,10 @@
       <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
     </div>
     <el-card class="box-card">
-      <div class="grid-content bg-purple">Controles</div>
+      <div class="grid-content bg-purple">{{ $t("msg.controls") }}</div>
 
       <div class="block">
-        <el-select v-model="empresa" placeholder="Seleccione la empresa">
+        <el-select v-model="empresa" :placeholder="$t('form.select.month')">
           <el-option
             v-for="item in empresaOptions"
             :key="item.value"
@@ -18,7 +18,7 @@
           ></el-option>
         </el-select>
 
-        <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')"></el-date-picker>
         <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
         <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
         <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
@@ -36,8 +36,8 @@
                 :data="list"
                 show-summary
                 :summary-method="getSumatoria"
-                element-loading-text="Cargando"
-                empty-text="No se han recuperado datos del servidor"
+                :element-loading-text="$t('msg.loading')"
+                :empty-text="$t('msg.no-data')"
                 border
                 stripe
                 fit
