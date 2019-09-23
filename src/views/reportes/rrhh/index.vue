@@ -18,11 +18,11 @@
       <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
     </el-card>
     <el-card class="box-card">
-      <div class="Success">PERIODO: ACTUAL {{periodo}}</div>
+      <div class="Success">PERIODO: ACTUAL {{ }}</div>
     </el-card>
     <el-card class="box-card">
       <el-row :gutter="20">
-        <el-col :span="16">
+        <el-col :span="14">
           <el-table
             v-loading="listLoading"
             :data="list"
@@ -34,7 +34,7 @@
             empty-text="No se han recuperado datos del servidor"
             stripe
             highlight-current-row
-            style="width: 50%"
+            style="width: 100%"
           >
             <el-table-column align="center" prop="planta" label="PLANTA">
               <template slot-scope="scope">
@@ -51,8 +51,10 @@
             </el-table-column>
           </el-table>
         </el-col>
-        <el-col :span="8">
-          <!-- pie-chart /-->
+        <el-col :span="10">
+          <div class="chart-wrapper">
+            <pie-chart />
+          </div>
         </el-col>
       </el-row>
     </el-card>
@@ -89,9 +91,13 @@ export default {
     };
   },
   created() {
-    this.fetchData("");
+    this.inicializar("");
   },
   methods: {
+    async inicializar(param) {
+      await this.fetchData(param);
+      await this.procesarDatos(this.list);
+    },
     async fetchData(param) {
       this.listLoading = true;
       const ENDPOINT = "WSDOTACTP";
@@ -99,6 +105,7 @@ export default {
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
           this.list = response.data.RRHH;
+          console.log("Proceso 1 - OK");
         })
         .catch(error => {
           Message({
@@ -108,6 +115,10 @@ export default {
           });
         })
         .finally(() => (this.listLoading = false));
+    },
+    async procesarDatos(lista) {
+      console.log("Proceso 2 - OK");
+      console.log(lista);
     },
     actualizarDatos() {
       if (this.periodo !== null) {
@@ -206,5 +217,11 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.chart-wrapper {
+  background: #fff;
+  padding: 16px 16px 0;
+  margin-bottom: 32px;
 }
 </style>

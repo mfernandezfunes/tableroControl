@@ -7,7 +7,7 @@ module.exports = {
    * @description Whether fix the header
    */
   fixedHeader: false,
-
+  language: 'es',
   /**
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar

@@ -50,23 +50,32 @@ export default {
           formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         legend: {
-          left: "center",
-          bottom: "10",
+          type: "scroll",
+          orient: "vertical",
+          right: 10,
+          top: 20,
+          bottom: 20,
           data: ["Industries", "Technology", "Forex", "Gold", "Forecasts"]
         },
         series: [
           {
-            name: "Presentismo",
+            name: "Personal",
             type: "pie",
-            roseType: "radius",
-            radius: [5, 100],
-            center: ["1%", "1%"],
+            radius: "70%",
+            center: ["50%", "50%"],
             data: [
               { value: 1, name: "San Juan" },
               { value: 127, name: "Belgrano" },
               { value: 79, name: "Campana" },
               { value: 113, name: "Bernal" }
             ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            },
             animationEasing: "cubicInOut",
             animationDuration: 1600
           }
