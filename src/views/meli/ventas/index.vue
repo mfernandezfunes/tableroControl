@@ -1,10 +1,12 @@
 <template>
   <div class="app-container">
     <div>
-      <h1>Ventas</h1>
-      <h3>Muestra por día del mes consultado la sumatoria de los valores facturados.</h3>
+      <h1>Mercado Libre VENTAS</h1>
+      <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
     </div>
     <el-card class="box-card">
+      <div class="grid-content bg-purple">{{ $t("msg.controls") }}</div>
+
       <div class="block">
         <el-select v-model="empresa" :placeholder="$t('form.select.company')">
           <el-option
@@ -16,27 +18,12 @@
           ></el-option>
         </el-select>
 
-        <el-select
-          v-model="canalVenta"
-          multiple
-          collapse-tags
-          style="margin-left: 20px;"
-          :placeholder="$t('form.select.channel')"
-        >
-          <el-option
-            v-for="item in canalVentasOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')" />
+        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')"></el-date-picker>
         <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
         <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
         <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
         <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
       </div>
-      {{ periodo }}
     </el-card>
 
     <el-row>
@@ -47,13 +34,14 @@
               <el-table
                 v-loading="listLoading"
                 :data="list"
-                :summary-method="getSumatoria"
-                :row-class-name="tableRowClassName"
                 show-summary
+                :summary-method="getSumatoria"
                 :element-loading-text="$t('msg.loading')"
                 :empty-text="$t('msg.no-data')"
                 border
+                stripe
                 fit
+                highlight-current-row
               >
                 <el-table-column align="center" prop="weekDay" :label="$t('tables.txt.weekDay')">
                   <template slot-scope="scope">
@@ -77,11 +65,13 @@
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light">
-          <el-card class="box-card">
-            <div>
-              <highcharts :options="chartOptions" />
-            </div>
-          </el-card>
+          <div>
+            <el-card class="box-card">
+              <div>
+                <highcharts :options="chartOptions"></highcharts>
+              </div>
+            </el-card>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -92,7 +82,7 @@
 import axios from "axios";
 import numeral from "numeral";
 import moment from "moment";
-import { MessageBox, Message } from "element-ui";
+import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
 
 export default {
@@ -101,7 +91,6 @@ export default {
       list: [],
       listLoading: false,
       periodo: null,
-      empresa: "1",
       diaSemana: [
         "Domingo",
         "Lunes",
@@ -110,168 +99,13 @@ export default {
         "Jueves",
         "Viernes",
         "Sábado"
-      ],
-      empresaOptions: [
-        {
-          value: "1",
-          label: "VALOT S.A.",
-          disabled: false
-        },
-        {
-          value: "2",
-          label: "HIGIENE 3000 S.A.",
-          disabled: true
-        }
-      ],
-      canalVenta: [],
-      canalVentasOptions: [
-        {
-          value: "1",
-          label: "Institucionales Vendedores MoBiles",
-          disabled: false
-        },
-        {
-          value: "2",
-          label: "Grandes Clientes del Interior",
-          disabled: false
-        },
-        {
-          value: "3",
-          label: "Licitaciones",
-          disabled: false
-        },
-        {
-          value: "4",
-          label: "Exportaciones",
-          disabled: false
-        },
-        {
-          value: "5",
-          label: "Punto de Venta - Local Belgrano 1250",
-          disabled: true
-        },
-        {
-          value: "6",
-          label: "Consumo Interno",
-          disabled: true
-        },
-        {
-          value: "7",
-          label: "Institucionales CALL CENTER",
-          disabled: true
-        },
-        {
-          value: "8",
-          label: "Institucionales San Juan",
-          disabled: true
-        },
-        {
-          value: "9",
-          label: "Convertidores de Bobinas Industriales",
-          disabled: true
-        },
-        {
-          value: "10",
-          label: "Bienes de Uso",
-          disabled: true
-        },
-        {
-          value: "11",
-          label: "Personal",
-          disabled: true
-        },
-        {
-          value: "12",
-          label: "Canjes",
-          disabled: true
-        },
-        {
-          value: "13",
-          label: "La Bernalesa-PILB",
-          disabled: true
-        },
-        {
-          value: "14",
-          label: "Gdes. Clientes del Interior Cuentas R9*",
-          disabled: true
-        },
-        {
-          value: "15",
-          label: "PROMO VENTAS",
-          disabled: true
-        }
-      ],
-      chartOptions: {
-        title: {
-          text: "Histórico de Facturación"
-        },
-        legend: {
-          shadow: true,
-          verticalAlign: "bottom"
-        },
-        tooltip: {
-          shared: true,
-          followPointer: true
-        },
-        plotOptions: {
-          column: {
-            grouping: true,
-            shadow: false,
-            borderWidth: 0
-          }
-        },
-        credits: {
-          enabled: false
-        },
-        series: [],
-        yAxis: {
-          title: {
-            text: "$ Pesos"
-          }
-        },
-        xAxis: {
-          categories: [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31
-          ],
-          title: {
-            text: "Fecha"
-          }
-        }
-      }
+      ]
     };
   },
   created() {
     //this.fetchData();
+    // https://api.mercadolibre.com/orders/search?seller=205254255&access_token=APP_USR-4011635735897252-070520-f8c887f6654e655bf263795d4d92681a-205254255
+    url: `${process.env.VUE_APP_MELI_API}orders/search?seller_id=${process.env.VUE_APP_ML_SELLER}${process.env.VUE_APP_ACCESS_TOKEN}`;
   },
   methods: {
     imprimirDatos() {
@@ -285,17 +119,7 @@ export default {
       return this.diaSemana[dia];
     },
     formatearFecha(fecha) {
-      let fechaFormateada = "";
-      if (fecha !== "") {
-        fechaFormateada = fecha.replace(
-          /^(\d{4})-(\d{2})-(\d{2})$/g,
-          "$3/$2/$1"
-        );
-      }
-      return fechaFormateada;
-    },
-    limpiarGrafico() {
-      this.chartOptions.series = [];
+      return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     },
     actualizarDatos() {
       if (this.periodo !== null) {
@@ -310,12 +134,12 @@ export default {
         ) {
           Message({
             message:
-              "El período seleccionado no debe ser posterior a la fecha actual",
+              "El mes seleccionado no debe ser posterior a la fecha actual",
             type: "error",
             duration: 5 * 1000
           });
         } else {
-          let para = `?empresa=${empresa}&annio=${year}&mes=${month}`;
+          let para = `?annio=${year}&mes=${month}`;
           this.fetchData(para);
           Message({
             message: `Se solicito la actualizacion de datos para el mes ${month}/${year}`,
@@ -336,14 +160,15 @@ export default {
       if (this.periodo != null) {
         let fechas = [],
           valores = [];
-        for (let dia of this.list) {
-          fechas.push(dia.FECHA);
-          valores.push(dia.TOTAL);
+        for (let item of this.list) {
+          fechas.push(item.FECHA);
+          valores.push(item.TOTAL);
         }
         this.chartOptions.series.push({
           name: `${this.periodo.getMonth() + 1}/${this.periodo.getFullYear()}`,
           data: valores
         });
+
         Message({
           message: `Se solicito la actualizacion del ploteo del Gráfico`,
           type: "success",
@@ -357,17 +182,19 @@ export default {
         });
       }
     },
+    limpiarGrafico() {
+      this.chartOptions.series = [];
+    },
     fetchData(periodo) {
-      const ENDPOINT = "WSFACDIAP";
+      const ENDPOINT = "WSCOBDIAP";
       this.listLoading = true;
-      this.list = null;
+      this.list = [];
       let fechas = "";
       if (!isUndefined(periodo)) fechas = periodo;
       axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${fechas}`)
         .then(response => {
-          let lista = response.data.FACTURACION;
-          this.list = lista;
+          this.list = this.limpiarLista(response.data.COBRANZAS);
         })
         .catch(error => {
           Message({
@@ -388,6 +215,8 @@ export default {
         }
         const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
+          console.log(values);
+
           sums[index] =
             "$ " +
             values.reduce((prev, curr) => {
@@ -402,30 +231,32 @@ export default {
           sums[index] = "N/A";
         }
       });
+
       return sums;
     },
-    tableRowClassName({ row, rowIndex }) {
-      if (row.FECHA == "") {
-        return "warning-row";
-      } else {
-        return "success-row";
+    limpiarLista(lista) {
+      let nuevaLista = [];
+      for (let elemento of lista) {
+        if (elemento.FECHA != "") {
+          nuevaLista.push(elemento);
+        }
       }
+      return nuevaLista;
     }
   }
 };
 </script>
+
 <style>
+.is-selected {
+  color: #1989fa;
+}
+
 .item {
   padding: 18px 0;
 }
-.el-table .warning-row {
-  background: black;
-}
-.el-table .success-row {
-  background: lavender;
-}
+
 .box-card {
-  padding: 18px 0;
-  weight: 50%;
+  padding: 10px, 10px, 10px, 10px;
 }
 </style>

@@ -117,8 +117,11 @@ export default {
         .finally(() => (this.listLoading = false));
     },
     async procesarDatos(lista) {
-      console.log("Proceso 2 - OK");
-      console.log(lista);
+      return new Promise(resolve => {
+        setTimeout(() => resolve("I did something"), 3000);
+        console.log("Proceso 2 - OK");
+        console.log(lista);
+      });
     },
     actualizarDatos() {
       if (this.periodo !== null) {

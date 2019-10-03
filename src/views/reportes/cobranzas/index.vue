@@ -35,7 +35,6 @@
                 v-loading="listLoading"
                 :data="list"
                 show-summary
-                :summary-method="getSumatoria"
                 :element-loading-text="$t('msg.loading')"
                 :empty-text="$t('msg.no-data')"
                 border
