@@ -123,7 +123,7 @@ export default {
       this.chartOptions.series = [];
     },
     armarSabana() {
-      let objDato = { fecha: "", dia: "", cobranzas: "", ventas: "" };
+      let objDato = { fecha: "", dia: "", cobranzas: 0, ventas: 0 };
 
       for (let i = 0; i < this.listaCobranzas.length; i++) {
         objDato.fecha = this.listaCobranzas[i].FECHA;
@@ -131,8 +131,7 @@ export default {
         objDato.cobranzas = this.listaCobranzas[i].TOTAL;
 
         objDato.ventas = this.listaVentas[i].TOTAL;
-        console.log(i);
-        
+
         this.listaCompleta.push(objDato);
       }
     },

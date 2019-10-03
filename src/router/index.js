@@ -132,7 +132,7 @@ export const constantRoutes = [{
     path: '/meli',
     component: Layout,
     redirect: '/meli/table',
-    name: 'Reportes',
+    name: 'Mercadolibre',
     meta: {
       title: 'Mercado Libre',
       icon: 'exampe'
@@ -147,7 +147,7 @@ export const constantRoutes = [{
       },
     }, {
       path: 'ventas',
-      name: 'Ventas',
+      name: 'OPeracion de Venta',
       component: () => import('@/views/meli/ventas/index'),
       meta: {
         title: 'Ventas',
