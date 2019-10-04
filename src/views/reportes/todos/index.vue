@@ -5,8 +5,7 @@
       <h3></h3>
     </div>
     <div v-for="i in 30">
-      <el-card class="box-card">{{listaCobranzas[i-1]}}</el-card>
-      <el-card class="box-card">{{listaVentas[i-1]}}</el-card>
+      <el-card class="box-card">{{listaCompleta[i-1]}}</el-card>
     </div>
   </div>
 </template>
@@ -23,6 +22,7 @@ export default {
     return {
       listaCobranzas: [],
       listaVentas: [],
+      greaterTen: [],
       listaCompleta: [],
       listLoading: false,
       empresa: 1,
@@ -106,7 +106,10 @@ export default {
     };
   },
   async created() {
-    this.getDatos();
+    await this.getDatos();
+    this.armarSabana();
+
+    console.log(this.listaCompleta);
   },
   methods: {
     formatearPeso(valor) {
@@ -126,13 +129,13 @@ export default {
       let objDato = { fecha: "", dia: "", cobranzas: 0, ventas: 0 };
 
       for (let i = 0; i < this.listaCobranzas.length; i++) {
-        objDato.fecha = this.listaCobranzas[i].FECHA;
+        objDato.fecha = new Date(this.listaCobranzas[i].FECHA);
         objDato.dia = this.retornaSemana(this.listaCobranzas[i].FECHA);
         objDato.cobranzas = this.listaCobranzas[i].TOTAL;
-
         objDato.ventas = this.listaVentas[i].TOTAL;
 
         this.listaCompleta.push(objDato);
+        objDato = { fecha: "", dia: "", cobranzas: 0, ventas: 0 };
       }
     },
     async getCobranzas(params) {
@@ -188,10 +191,6 @@ export default {
 
       await this.getCobranzas(params);
       await this.getVentas(params);
-      this.armarSabana();
-      console.log(this.listaCobranzas);
-      console.log(this.listaVentas);
-      console.log(this.listaCompleta);
     },
     limpiarLista(lista) {
       let nuevaLista = [];
