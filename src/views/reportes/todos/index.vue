@@ -71,7 +71,7 @@
             >(Calculo en base a {{objetoAnalisis.cantidad.cobranzas}} días)</div>
             <div></div>
 
-            <el-collapse v-model="activeNames" @change="handleChange">
+            <el-collapse>
               <el-collapse-item title="Resumen diario" name="1">
                 <el-table
                   :data="objetoAnalisis.datos"
@@ -130,10 +130,10 @@
                 >Ir</el-button>
               </router-link>
             </div>
-            <span class="card-panel-title">BELGRANO</span>
+            <span class="card-panel-title" style="float: right;">BELGRANO</span>
             <div class="card-panel-text">Plantel Activo:</div>
             <div class="card-panel-num">
-              <strong>127</strong>
+              <strong>{{objetoRRHH.datos[1].DOTACION}}</strong>
             </div>
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
@@ -146,7 +146,7 @@
             <span class="card-panel-title">BERNAL</span>
             <div class="card-panel-text">Plantel Activo:</div>
             <div class="card-panel-num">
-              <strong>113</strong>
+              <strong>{{objetoRRHH.datos[3].DOTACION}}</strong>
             </div>
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
@@ -159,7 +159,7 @@
             <span class="card-panel-title">CAMPANA</span>
             <div class="card-panel-text">Plantel Activo:</div>
             <div class="card-panel-num">
-              <strong>79</strong>
+              <strong>{{objetoRRHH.datos[2].DOTACION}}</strong>
             </div>
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
@@ -184,7 +184,6 @@
 import axios from "axios";
 import numeral from "numeral";
 import moment from "moment";
-import cardGroup from "./components/cardGroup";
 import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
 
@@ -198,6 +197,8 @@ export default {
         sumatoria: { ventas: 0.0, cobranzas: 0.0 },
         datos: []
       },
+      objetoRRHH: { datos: [] },
+      objetoProduccion: {},
       listaCobranzas: [],
       listaVentas: [],
       greaterTen: [],
@@ -218,11 +219,38 @@ export default {
   },
   async created() {
     await this.getDatos();
+    await this.getRRHH();
     this.armarSabana();
-
-    console.log(this.listaCompleta);
   },
   methods: {
+    actualizarDatos() {},
+    async getRRHH(params) {
+      this.listLoading = true;
+      const ENDPOINT = "WSDOTACTP";
+      let parametros = "";
+      if (!isUndefined(params)) parametros = params;
+      axios
+        .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
+        .then(response => {
+          //this.objetoRRHH = response.data.RRHH;
+          let items = response.data.RRHH;
+
+          for (const item of items) {
+            this.objetoRRHH.datos.push(item);
+          }
+          //console.log(this.objetoRRHH.datos);
+          //items = this.objetoRRHH.datos;
+          //console.log(items.findIndex(items => items.PLANTA === "BERNAL"));
+        })
+        .catch(error => {
+          Message({
+            message: "SE HA DETECTADO UN ERROR: " + error.message,
+            type: "error",
+            duration: 5 * 1000
+          });
+        })
+        .finally(() => (this.listLoading = false));
+    },
     formatearPeso(valor) {
       return numeral(valor).format("0,0.00");
     },
