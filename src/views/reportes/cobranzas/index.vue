@@ -3,29 +3,34 @@
     <div>
       <h1>Cobranzas</h1>
       <h3>Muestra por día del mes consultado la sumatoria de los valores cobrados o a depositar en dicho día.</h3>
+
+      <el-row shadow="always">
+        <el-col :span="24">
+          <div class="grid-content">
+            <el-card class="box-card">
+              <div class="tituloControles">{{ $t("msg.controls") }}</div>
+
+              <el-select v-model="empresa" :placeholder="$t('form.select.company')">
+                <el-option
+                  v-for="item in empresaOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+
+              <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')"></el-date-picker>
+              <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+              <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
+              <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
+              <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
+              <h3></h3>
+            </el-card>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-    <el-card class="box-card">
-      <div class="grid-content bg-purple">{{ $t("msg.controls") }}</div>
-
-      <div class="block">
-        <el-select v-model="empresa" :placeholder="$t('form.select.company')">
-          <el-option
-            v-for="item in empresaOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
-        </el-select>
-
-        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')"></el-date-picker>
-        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
-        <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
-        <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
-        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
-      </div>
-    </el-card>
-
     <el-row>
       <el-col :span="12">
         <div class="grid-content bg-purple">
@@ -332,7 +337,12 @@ export default {
 .item {
   padding: 18px 0;
 }
-
+.tituloControles {
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
 .box-card {
   padding: 10px, 10px, 10px, 10px;
 }

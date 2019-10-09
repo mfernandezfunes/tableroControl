@@ -3,9 +3,9 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="card-panel-title">
-          <strong>VENTAS</strong>
+          <strong>PRODUCCION</strong>
         </span>
-        <router-link :to="{name: 'Ventas'}">
+        <router-link :to="{name: 'Produccion'}">
           <el-button
             style="float: right; padding: 3px 3"
             size="medium"
@@ -13,26 +13,23 @@
           >Ir</el-button>
         </router-link>
       </div>
-      <div class="card-panel-text">Dia hábil anterior:</div>
-      <div class="card-panel-num">
-        <strong>$ -</strong>
-      </div>
+      <span class="card-panel-title">BERNAL</span>
       <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
-        <strong>${{formatearPeso(objetoAnalisis.sumatoria.ventas)}}</strong>
+        <strong>- Kg</strong>
       </div>
-      <div class="card-panel-text">Promedio:</div>
+      <span class="card-panel-title">CAMPANA</span>
+      <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
-        <strong>${{formatearPeso(objetoAnalisis.promedios.ventas)}}</strong>
+        <strong>- Kg</strong>
       </div>
-      <div class="card-panel-text">(Calculo en base a {{objetoAnalisis.cantidad.ventas}} días)</div>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CardVentas",
+  name: "CardProduccion",
   data() {
     return {};
   }

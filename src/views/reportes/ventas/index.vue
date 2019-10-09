@@ -4,40 +4,48 @@
       <h1>Ventas</h1>
       <h3>Muestra por día del mes consultado la sumatoria de los valores facturados.</h3>
     </div>
-    <el-card class="box-card">
-      <div class="block">
-        <el-select v-model="empresa" :placeholder="$t('form.select.company')">
-          <el-option
-            v-for="item in empresaOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
-        </el-select>
 
-        <el-select
-          v-model="canalVenta"
-          multiple
-          collapse-tags
-          style="margin-left: 20px;"
-          :placeholder="$t('form.select.channel')"
-        >
-          <el-option
-            v-for="item in canalVentasOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')" />
-        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
-        <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
-        <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
-        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
-      </div>
-      {{ periodo }}
-    </el-card>
+    <el-row shadow="always">
+      <el-col :span="24">
+        <div class="grid-content">
+          <el-card class="box-card">
+            <div class="tituloControles">{{ $t("msg.controls") }}</div>
+
+            <el-select v-model="empresa" :placeholder="$t('form.select.company')">
+              <el-option
+                v-for="item in empresaOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+
+            <el-select
+              v-model="canalVenta"
+              multiple
+              collapse-tags
+              style="margin-left: 20px;"
+              :placeholder="$t('form.select.channel')"
+            >
+              <el-option
+                v-for="item in canalVentasOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')" />
+            <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+            <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
+            <el-button @click="limpiarGrafico">{{ $t("btn.clean-graph") }}</el-button>
+            <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
+
+            <h3></h3>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
 
     <el-row>
       <el-col :span="12">
@@ -427,5 +435,11 @@ export default {
 .box-card {
   padding: 18px 0;
   weight: 50%;
+}
+.tituloControles {
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 </style>

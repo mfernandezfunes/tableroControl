@@ -4,19 +4,31 @@
       <h1>Recursos Humanos</h1>
       <h3>Muestra por planta operativa la cantidad de empleados activos a la fecha de petición</h3>
     </div>
-    <el-card class="box-card">
-      <el-select v-model="empresa" placeholder="Seleccione la Empresa" disabled>
-        <el-option
-          v-for="item in empresaOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.disabled"
-        ></el-option>
-      </el-select>
-      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" disabled></el-date-picker>
-      <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
-    </el-card>
+
+    <el-row shadow="always">
+      <el-col :span="24">
+        <div class="grid-content">
+          <el-card class="box-card">
+            <div class="tituloControles">{{ $t("msg.controls") }}</div>
+
+            <el-select v-model="empresa" placeholder="Seleccione la Empresa" disabled>
+              <el-option
+                v-for="item in empresaOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+            <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes" disabled></el-date-picker>
+            <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
+
+            <h3></h3>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
+
     <el-card class="box-card">
       <div class="Success">PERIODO: ACTUAL {{ }}</div>
     </el-card>
@@ -221,7 +233,12 @@ export default {
     margin-bottom: 0;
   }
 }
-
+.tituloControles {
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
 .chart-wrapper {
   background: #fff;
   padding: 16px 16px 0;

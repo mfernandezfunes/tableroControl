@@ -4,22 +4,30 @@
       <h1>Producción Mensual Acumulada</h1>
       <h3>Muestra por planta operativa el acumulado mensual en kilos de la producción de productos en papel. Para el caso del mes corriente recupera el acumulado a la fecha/hora de petición.</h3>
     </div>
-    <el-card class="box-card">
-      <div class="block">
-        <el-select v-model="empresa" placeholder="Seleccione la Empresa">
-          <el-option
-            v-for="item in empresaOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
-        </el-select>
-        <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-        <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
-        <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
-      </div>
-    </el-card>
+
+    <el-row shadow="always">
+      <el-col :span="24">
+        <div class="grid-content">
+          <el-card class="box-card">
+            <div class="tituloControles">{{ $t("msg.controls") }}</div>
+
+            <el-select v-model="empresa" placeholder="Seleccione la Empresa">
+              <el-option
+                v-for="item in empresaOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+            <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+            <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
+            <el-button @click="imprimirDatos">{{ $t("btn.send-console") }}</el-button>
+            <h3></h3>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
 
     <el-card class="box-card">
       <div>
@@ -214,3 +222,22 @@ export default {
   }
 };
 </script>
+
+<style>
+.is-selected {
+  color: #1989fa;
+}
+
+.item {
+  padding: 18px 0;
+}
+.tituloControles {
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+.box-card {
+  padding: 10px, 10px, 10px, 10px;
+}
+</style>

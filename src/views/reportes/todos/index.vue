@@ -2,181 +2,35 @@
   <div class="app-container">
     <div>
       <h1>Resúmen Período Actual: {{objetoAnalisis.periodo}}</h1>
-      <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
-      <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
-      <h3></h3>
-    </div>
 
+      <el-row shadow="always">
+        <el-col :span="24">
+          <div class="grid-content">
+            <el-card class="box-card">
+              <div class="tituloControles">{{ $t("msg.controls") }}</div>
+              <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+              <el-button @click="actualizarDatos" disabled>{{ $t("btn.update") }}</el-button>
+              <h3></h3>
+            </el-card>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <BaseHero />
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span class="card-panel-title">
-                <strong>VENTAS</strong>
-              </span>
-              <router-link :to="{name: 'Ventas'}">
-                <el-button
-                  style="float: right; padding: 3px 3"
-                  size="medium"
-                  icon="el-icon-arrow-right"
-                >Ir</el-button>
-              </router-link>
-            </div>
-            <div class="card-panel-text">Dia hábil anterior:</div>
-            <div class="card-panel-num">
-              <strong>$ -</strong>
-            </div>
-            <div class="card-panel-text">Total Acumulado:</div>
-            <div class="card-panel-num">
-              <strong>${{formatearPeso(objetoAnalisis.sumatoria.ventas)}}</strong>
-            </div>
-            <div class="card-panel-text">Promedio:</div>
-            <div class="card-panel-num">
-              <strong>${{formatearPeso(objetoAnalisis.promedios.ventas)}}</strong>
-            </div>
-            <div class="card-panel-text">(Calculo en base a {{objetoAnalisis.cantidad.ventas}} días)</div>
-          </el-card>
-        </div>
+        <CardVentas />
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span class="card-panel-title">
-                <strong>COBRANZAS</strong>
-              </span>
-              <router-link :to="{name: 'Cobranzas'}">
-                <el-button
-                  style="float: right; padding: 3px 3"
-                  size="medium"
-                  icon="el-icon-arrow-right"
-                >Ir</el-button>
-              </router-link>
-            </div>
-            <div class="card-panel-text">Dia hábil anterior:</div>
-            <div class="card-panel-num">
-              <strong>$ -</strong>
-            </div>
-            <div class="card-panel-text">Total Acumulado:</div>
-            <div class="card-panel-num">
-              <strong>${{formatearPeso(objetoAnalisis.sumatoria.cobranzas)}}</strong>
-            </div>
-            <div class="card-panel-text">Promedio:</div>
-            <div class="card-panel-num">
-              <strong>${{formatearPeso(objetoAnalisis.promedios.cobranzas)}}</strong>
-            </div>
-            <div
-              class="card-panel-text"
-            >(Calculo en base a {{objetoAnalisis.cantidad.cobranzas}} días)</div>
-            <div></div>
-
-            <el-collapse>
-              <el-collapse-item title="Resumen diario" name="1">
-                <el-table
-                  :data="objetoAnalisis.datos"
-                  border
-                  height="400"
-                  style="width: 100%; magin-top: 20px"
-                >
-                  <el-table-column prop="fecha" label="Fecha"></el-table-column>
-                  <el-table-column prop="formatearPeso(cobranzas)" label="Valor"></el-table-column>
-                </el-table>
-              </el-collapse-item>
-            </el-collapse>
-          </el-card>
-        </div>
+        <CardCobranzas />
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span class="card-panel-title">
-                <strong>PRODUCCION</strong>
-              </span>
-              <router-link :to="{name: 'Produccion'}">
-                <el-button
-                  style="float: right; padding: 3px 3"
-                  size="medium"
-                  icon="el-icon-arrow-right"
-                >Ir</el-button>
-              </router-link>
-            </div>
-            <span class="card-panel-title">BERNAL</span>
-            <div class="card-panel-text">Total Acumulado:</div>
-            <div class="card-panel-num">
-              <strong>- Kg</strong>
-            </div>
-            <span class="card-panel-title">CAMPANA</span>
-            <div class="card-panel-text">Total Acumulado:</div>
-            <div class="card-panel-num">
-              <strong>- Kg</strong>
-            </div>
-          </el-card>
-        </div>
+        <CardProduccion />
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span class="card-panel-title">
-                <strong>RRHH</strong>
-              </span>
-              <router-link :to="{name: 'RRHH'}">
-                <el-button
-                  style="float: right; padding: 3px 3"
-                  size="medium"
-                  icon="el-icon-arrow-right"
-                >Ir</el-button>
-              </router-link>
-            </div>
-            <span class="card-panel-title" style="float: right;">BELGRANO</span>
-            <div class="card-panel-text">Plantel Activo:</div>
-            <div class="card-panel-num">
-              <strong>{{objetoRRHH.datos[1].DOTACION}}</strong>
-            </div>
-            <div class="card-panel-text">Ausentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-            <div class="card-panel-text">Presentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-            <span class="card-panel-title">BERNAL</span>
-            <div class="card-panel-text">Plantel Activo:</div>
-            <div class="card-panel-num">
-              <strong>{{objetoRRHH.datos[3].DOTACION}}</strong>
-            </div>
-            <div class="card-panel-text">Ausentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-            <div class="card-panel-text">Presentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-            <span class="card-panel-title">CAMPANA</span>
-            <div class="card-panel-text">Plantel Activo:</div>
-            <div class="card-panel-num">
-              <strong>{{objetoRRHH.datos[2].DOTACION}}</strong>
-            </div>
-            <div class="card-panel-text">Ausentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-            <div class="card-panel-text">Presentes:</div>
-            <div class="card-panel-num">
-              <strong>-</strong>
-            </div>
-          </el-card>
-        </div>
+        <CardRRHH />
       </el-col>
     </el-row>
-
-    <!--div v-for="i in 30">
-      <el-card class="box-card">{{listaCompleta[i-1]}}</el-card>
-    </div-->
   </div>
 </template>
 
@@ -187,7 +41,20 @@ import moment from "moment";
 import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
 
+import CardVentas from "./components/CardVentas";
+import CardCobranzas from "./components/CardCobranzas";
+import CardProduccion from "./components/CardProduccion";
+import CardRRHH from "./components/CardRRHH";
+import BaseHero from "./components/BaseHero";
+
 export default {
+  components: {
+    CardVentas,
+    CardCobranzas,
+    CardProduccion,
+    CardRRHH,
+    BaseHero
+  },
   data() {
     return {
       objetoAnalisis: {
@@ -241,6 +108,30 @@ export default {
           //console.log(this.objetoRRHH.datos);
           //items = this.objetoRRHH.datos;
           //console.log(items.findIndex(items => items.PLANTA === "BERNAL"));
+        })
+        .catch(error => {
+          Message({
+            message: "SE HA DETECTADO UN ERROR: " + error.message,
+            type: "error",
+            duration: 5 * 1000
+          });
+        })
+        .finally(() => (this.listLoading = false));
+    },
+    async getRRHH(params) {
+      this.listLoading = true;
+      const ENDPOINT = "WSDOTACTP";
+      let parametros = "";
+      if (!isUndefined(params)) parametros = params;
+      axios
+        .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
+        .then(response => {
+          //this.objetoRRHH = response.data.RRHH;
+          let items = response.data.RRHH;
+
+          for (const item of items) {
+            this.objetoRRHH.datos.push(item);
+          }
         })
         .catch(error => {
           Message({
@@ -402,6 +293,12 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+}
+.tituloControles {
+  line-height: 30px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 .el-col {
   border-radius: 4px;
