@@ -54,6 +54,20 @@ export const constantRoutes = [{
       }
     }]
   },
+  /*{
+    path: '/',
+    component: Layout,
+    redirect: '/tablero',
+    children: [{
+      path: 'tablero',
+      name: 'Tablero',
+      component: () => import('@/views/dashboard/index'),
+      meta: {
+        title: 'Tablero',
+        icon: 'dashboard'
+      }
+    }]
+  },*/
   {
     path: '/reportes',
     component: Layout,
@@ -96,15 +110,6 @@ export const constantRoutes = [{
         component: () => import('@/views/reportes/rrhh/index'),
         meta: {
           title: 'RRHH',
-          icon: 'people'
-        }
-      },
-      {
-        path: 'todos',
-        name: 'TODOS',
-        component: () => import('@/views/reportes/todos/index'),
-        meta: {
-          title: 'TODOS',
           icon: 'people'
         }
       },

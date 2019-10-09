@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import HighchartsVue from 'highcharts-vue'
+import VueNumerals from 'vue-numerals'
 import i18n from './i18n'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
@@ -39,7 +40,10 @@ Vue.use(ElementUI, {
   locale
 })
 
-Vue.use(HighchartsVue)
+Vue.use(HighchartsVue);
+Vue.use(VueNumerals, {
+  locale: 'es'
+}); // default locale is 'en'
 
 Vue.config.productionTip = false
 

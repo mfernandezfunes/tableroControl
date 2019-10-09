@@ -117,7 +117,7 @@ export default {
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${param}`)
         .then(response => {
           this.list = response.data.RRHH;
-          console.log("Proceso 1 - OK");
+          //console.log("Proceso 1 - OK");
         })
         .catch(error => {
           Message({

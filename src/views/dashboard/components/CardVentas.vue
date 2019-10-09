@@ -15,17 +15,17 @@
       </div>
       <div class="card-panel-text">Dia hábil anterior:</div>
       <div class="card-panel-num">
-        <strong>$ -</strong>
+        <strong>-</strong>
       </div>
       <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
-        <strong>${{formatearPeso(objetoAnalisis.sumatoria.ventas)}}</strong>
+        <strong>{{datos.sumatoria.ventas | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
       <div class="card-panel-text">Promedio:</div>
       <div class="card-panel-num">
-        <strong>${{formatearPeso(objetoAnalisis.promedios.ventas)}}</strong>
+        <strong>{{datos.promedios.ventas | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
-      <div class="card-panel-text">(Calculo en base a {{objetoAnalisis.cantidad.ventas}} días)</div>
+      <div class="card-panel-text">(Calculo en base a {{datos.cantidad.ventas}} días)</div>
     </el-card>
   </div>
 </template>
@@ -35,6 +35,12 @@ export default {
   name: "CardVentas",
   data() {
     return {};
+  },
+  props: {
+    datos: {
+      type: Object,
+      required: true
+    }
   }
 };
 </script>
