@@ -16,15 +16,15 @@
 
       <span class="card-panel-title">BERNAL</span>
 
-      <div class="card-panel-text">Total Acumulado {{toFirstUp(datos[2].PRODUCTO)}}:</div>
+      <div class="card-panel-text">Total Acumulado {{toFirstUp(datos.datos[3].PRODUCTO)}}:</div>
       <div class="card-panel-num">
-        <strong>{{datos[3].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
+        <strong>{{datos.datos[3].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
       </div>
       <el-divider></el-divider>
       <span class="card-panel-title">CAMPANA</span>
-      <div class="card-panel-text">Total Acumulado {{toFirstUp(datos[2].PRODUCTO)}}:</div>
+      <div class="card-panel-text">Total Acumulado {{toFirstUp(datos.datos[2].PRODUCTO)}}:</div>
       <div class="card-panel-num">
-        <strong>{{datos[2].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
+        <strong>{{datos.datos[2].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
       </div>
     </el-card>
   </div>
@@ -40,10 +40,6 @@ export default {
     datos: {
       type: Object,
       required: true
-    },
-    btnOnClick: {
-      type: Function,
-      require: true
     }
   },
   methods: {
@@ -60,7 +56,6 @@ export default {
   }
 };
 </script>
-
 
 <style>
 </style>

@@ -13,26 +13,23 @@
           >Ir</el-button>
         </router-link>
       </div>
-      <div class="card-panel-text">Dia hábil anterior:</div>
-      <div class="card-panel-num">
-        <strong>-</strong>
-      </div>
+
       <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
-        <strong>{{datos.sumatoria.cobranzas | numeralFormat('$ 0,0[.]00') }}</strong>
+        <strong>{{datos.sumatoria | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
       <div class="card-panel-text">Promedio:</div>
       <div class="card-panel-num">
-        <strong>{{datos.promedios.cobranzas | numeralFormat('$ 0,0[.]00') }}</strong>
+        <strong>{{datos.promedio | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
-      <div class="card-panel-text">(Calculo en base a {{datos.cantidad.cobranzas}} días)</div>
+      <div class="card-panel-text">(Calculo en base a {{datos.cantidad}} días)</div>
       <div></div>
 
       <el-collapse>
         <el-collapse-item title="Ver resumen diario" name="1">
           <el-table :data="datos.datos" border height="400" style="width: 100%; magin-top: 20px">
-            <el-table-column prop="fecha" label="Fecha"></el-table-column>
-            <el-table-column prop="formatearPeso(cobranzas)" label="Importe"></el-table-column>
+            <el-table-column prop="FECHA" label="Fecha"></el-table-column>
+            <el-table-column prop="TOTAL" label="Importe"></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>

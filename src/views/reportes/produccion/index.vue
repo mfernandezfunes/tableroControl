@@ -29,6 +29,8 @@
       </el-col>
     </el-row>
 
+    <CardProduccion v-bind:datos="list" />
+
     <el-card class="box-card">
       <div>
         <el-table
@@ -72,11 +74,15 @@ import axios from "axios";
 import numeral from "numeral";
 import { MessageBox, Message } from "element-ui";
 import { formatearPeso } from "@/utils/";
+import CardProduccion from "../../dashboard/components/CardProduccion";
 
 export default {
+  components: {
+    CardProduccion
+  },
   data() {
     return {
-      list: [],
+      objetoProduccion: { datos: [] },
       date: null,
       sumaTotal: 0,
       listLoading: false,
@@ -98,7 +104,6 @@ export default {
   },
   created() {
     this.fetchData("");
-
     this.date = new Date();
     this.date.setDate(this.date.getDate() - 1);
     while (!this.isBusinessDay(this.date)) {

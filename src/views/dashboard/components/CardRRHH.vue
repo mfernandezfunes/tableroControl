@@ -27,67 +27,85 @@
           <el-col :span="8">
             <div class="card-panel-text">Plantel:</div>
             <div class="card-panel-num">
-              <strong>{{datos[1].DOTACION}}</strong>
+              <span style="color:blue">
+                <strong>{{datos.datos[1].DOTACION}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[1].AUSENTES}}</strong>
+              <span style="color:red">
+                <strong>{{datos.datos[1].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Presentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[1].DOTACION}}</strong>
+              <span style="color:green">
+                <strong>{{datos.datos[1].DOTACION-datos.datos[1].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
         </el-row>
       </div>
-      <el-divider></el-divider>
+
       <div class="card-panel-title">CAMPANA</div>
       <div>
         <el-row :gutter="24">
           <el-col :span="8">
             <div class="card-panel-text">Plantel:</div>
             <div class="card-panel-num">
-              <strong>{{datos[2].DOTACION}}</strong>
+              <span style="color:blue">
+                <strong>{{datos.datos[2].DOTACION}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[3].AUSENTES}}</strong>
+              <span style="color:red">
+                <strong>{{datos.datos[2].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Presentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[3].DOTACION}}</strong>
+              <span style="color:green">
+                <strong>{{datos.datos[2].DOTACION-datos.datos[2].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
         </el-row>
       </div>
-      <el-divider></el-divider>
+
       <div class="card-panel-title">BERNAL</div>
       <div>
         <el-row :gutter="24">
           <el-col :span="8">
             <div class="card-panel-text">Plantel:</div>
             <div class="card-panel-num">
-              <strong>{{datos[3].DOTACION}}</strong>
+              <span style="color:blue">
+                <strong>{{datos.datos[3].DOTACION}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Ausentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[3].AUSENTES}}</strong>
+              <span style="color:red">
+                <strong>{{datos.datos[3].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="card-panel-text">Presentes:</div>
             <div class="card-panel-num">
-              <strong>{{datos[3].DOTACION}}</strong>
+              <span style="color:green">
+                <strong>{{datos.datos[3].DOTACION-datos.datos[3].AUSENTES}}</strong>
+              </span>
             </div>
           </el-col>
         </el-row>
