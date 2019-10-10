@@ -17,7 +17,7 @@
                   :disabled="item.disabled"
                 ></el-option>
               </el-select>
-              <el-date-picker v-model="periodo" type="month" placeholder="Seleccione un mes"></el-date-picker>
+
               <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
               <h3></h3>
             </el-card>

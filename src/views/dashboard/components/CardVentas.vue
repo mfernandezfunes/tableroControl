@@ -25,7 +25,7 @@
       <div class="card-panel-text">(Calculo en base a {{datos.cantidad }} días)</div>
       <el-collapse>
         <el-collapse-item title="Ver resumen diario" name="1">
-          <el-table :data="vector" border height="400" style="width: 100%; magin-top: 20px">
+          <el-table :data="datos.datos" border height="400" style="width: 100%; magin-top: 20px">
             <el-table-column prop="FECHA" label="Fecha"></el-table-column>
             <el-table-column prop="TOTAL" label="Importe"></el-table-column>
           </el-table>
@@ -39,9 +39,7 @@
 export default {
   name: "CardVentas",
   data() {
-    return {
-      vector: []
-    };
+    return {};
   },
   props: {
     datos: {
@@ -49,18 +47,7 @@ export default {
       required: true
     }
   },
-  mounted() {
-    this.regenerarObjeto(this.datos.datos);
-  },
   methods: {
-    regenerarObjeto(objeto) {
-      for (const item of objeto) {
-        item.FECHA = formatearFecha(item.FECHA);
-        item.TOTAL = convertImporte(item.FECHA);
-        console.log(item);
-        this.vector.push(item);
-      }
-    },
     convertImporte(importe) {
       return importe.numeralFormat("$ 0,0[.]00");
     },
