@@ -66,16 +66,13 @@
                     <span>{{ retornaSemana(scope.row.FECHA) }}</span>
                   </template>
                 </el-table-column>
-
-                <el-table-column align="center" prop="fecha" :label="$t('tables.txt.date')">
-                  <template slot-scope="scope">
-                    <span>{{ formatearFecha(scope.row.FECHA) }}</span>
-                  </template>
-                </el-table-column>
-
-                <el-table-column align="center" prop="importe" :label="$t('tables.txt.subtot')">
-                  <template slot-scope="scope">$ {{ formatearPeso(scope.row.TOTAL) }}</template>
-                </el-table-column>
+                <el-table-column
+                  align="center"
+                  prop="FECHA"
+                  :label="$t('tables.txt.date')"
+                  :formatter="formatearFecha"
+                ></el-table-column>
+                <el-table-column align="center" prop="TOTAL" :label="$t('tables.txt.subtot')"></el-table-column>
               </el-table>
             </div>
           </el-card>
@@ -102,6 +99,7 @@ import numeral from "numeral";
 import moment from "moment";
 import { Message, DatePicker } from "element-ui";
 import { isUndefined } from "util";
+numeral.locale("en");
 
 export default {
   data() {
@@ -285,15 +283,9 @@ export default {
     imprimirDatos() {
       console.log(this.list);
     },
-    formatearPeso(valor) {
-      return numeral(valor).format("0,0.00");
-    },
     retornaSemana(fecha) {
       let dia = moment(fecha).day();
       return this.diaSemana[dia];
-    },
-    formatearFecha(fecha) {
-      return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     },
     actualizarDatos() {
       if (this.periodo !== null) {
@@ -416,6 +408,15 @@ export default {
         }
       }
       return nuevaLista;
+    },
+    formatearPeso(valor) {
+      return numeral(valor).format("0.0");
+    },
+    conValor(row, column, cellValue, index) {
+      return this.formatearPeso(cellValue);
+    },
+    formatearFecha(row, column, cellValue, index) {
+      return cellValue.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     }
   }
 };

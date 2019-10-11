@@ -22,12 +22,18 @@
       <div class="card-panel-num">
         <strong>{{datos.promedio | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
-      <div class="card-panel-text">(Calculo en base a {{datos.cantidad }} días)</div>
+      <div class="card-panel-text">(Calculo en base a {{datos.cantidad}} días)</div>
       <el-collapse>
         <el-collapse-item title="Ver resumen diario" name="1">
-          <el-table :data="datos.datos" border height="400" style="width: 100%; magin-top: 20px">
-            <el-table-column prop="FECHA" label="Fecha" formatter="cell => alert(cell)"></el-table-column>
-            <el-table-column prop="TOTAL" label="Importe"></el-table-column>
+          <el-table
+            :data="datos.datos"
+            stripe
+            fit
+            height="400"
+            style="width: 100%; magin-top: 20px"
+          >
+            <el-table-column prop="FECHA" sortable label="Fecha" :formatter="formatearFecha"></el-table-column>
+            <el-table-column prop="TOTAL" sortable label="Importe" :formatter="conValor"></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>
@@ -49,6 +55,7 @@
 </template>
 
 <script>
+import numeral from "numeral";
 export default {
   name: "CardVentas",
   data() {
@@ -61,19 +68,21 @@ export default {
     }
   },
   methods: {
-    convertImporte(importe) {
-      return importe.numeralFormat("$ 0,0[.]00");
+    formatearPeso(valor) {
+      return numeral(valor).format("$ 0,0[.]00");
     },
-    formatearFecha(fecha) {
-      return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
+    indexMethod(index) {
+      return index * 2;
     },
-    formatAuthority(value) {
-      return `ITEM ${value}`;
+    conValor(row, column, cellValue, index) {
+      return this.formatearPeso(cellValue);
+    },
+    formatearFecha(row, column, cellValue, index) {
+      return cellValue.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
     }
   }
 };
 </script>
-
 
 <style>
 </style>

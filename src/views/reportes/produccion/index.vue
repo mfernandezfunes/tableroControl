@@ -45,23 +45,16 @@
           highlight-current-row
           style="width: 100%"
         >
-          <el-table-column align="center" prop="planta" label="PLANTA" sortable>
-            <template slot-scope="scope">
-              <span>{{ toFirstUp(scope.row.PLANTA) }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column align="center" prop="producto" label="PRODUCTO">
-            <template slot-scope="scope">{{ toFirstUp(scope.row.PRODUCTO) }}</template>
-          </el-table-column>
-
-          <el-table-column align="center" prop="total" label="TOTAL">
-            <template slot-scope="scope">{{ formatearPeso(scope.row.TOTAL) }}</template>
-          </el-table-column>
-
-          <el-table-column align="center" prop="unidad" label="U/M">
-            <template slot-scope="scope">{{ toFirstUp(scope.row.UM) }}</template>
-          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="PLANTA"
+            label="PLANTA"
+            sortable
+            :formatter="conFirstUp"
+          ></el-table-column>
+          <el-table-column align="center" prop="PRODUCTO" label="PRODUCTO" :formatter="conFirstUp"></el-table-column>
+          <el-table-column align="center" prop="TOTAL" label="TOTAL" :formatter="conValor"></el-table-column>
+          <el-table-column align="center" prop="UM" label="U/M" :formatter="conFirstUp"></el-table-column>
         </el-table>
       </div>
       {{ formatearPeso(sumaTotal) }}
@@ -191,16 +184,14 @@ export default {
         }
         const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
-          sums[index] =
-            "$ " +
-            values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
         } else {
           sums[index] = "N/A";
         }
@@ -223,6 +214,15 @@ export default {
         return false;
       }
       return true;
+    },
+    conValor(row, column, cellValue, index) {
+      return this.formatearPeso(cellValue);
+    },
+    conFirstUp(row, column, cellValue, index) {
+      return this.toFirstUp(cellValue);
+    },
+    formatearPeso(valor) {
+      return numeral(valor).format("0.0");
     }
   }
 };
