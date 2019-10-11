@@ -14,17 +14,24 @@
         </router-link>
       </div>
 
-      <span class="card-panel-title">BERNAL</span>
+      <div class="card-panel-title">BERNAL</div>
 
       <div class="card-panel-text">Total Acumulado {{toFirstUp(datos.datos[3].PRODUCTO)}}:</div>
       <div class="card-panel-num">
         <strong>{{datos.datos[3].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
       </div>
-      <el-divider></el-divider>
-      <span class="card-panel-title">CAMPANA</span>
+
+      <div class="card-panel-title">CAMPANA</div>
       <div class="card-panel-text">Total Acumulado {{toFirstUp(datos.datos[2].PRODUCTO)}}:</div>
       <div class="card-panel-num">
         <strong>{{datos.datos[2].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
+      </div>
+      <el-divider></el-divider>
+      <div class="card-panel-title">TOTAL {{toFirstUp(datos.datos[2].PRODUCTO)}}:</div>
+      <div class="card-panel-num">
+        <span style="color:green">
+          <strong>{{ datos.datos[2].TOTAL + datos.datos[3].TOTAL | numeralFormat('0,0[.]00') }} Kg</strong>
+        </span>
       </div>
     </el-card>
   </div>

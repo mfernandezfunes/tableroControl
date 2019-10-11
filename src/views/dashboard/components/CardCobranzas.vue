@@ -4,6 +4,16 @@
       <div slot="header" class="clearfix">
         <span class="card-panel-title">
           <strong>COBRANZAS</strong>
+
+          <el-tooltip
+            effect="light"
+            content="Los datos incluyen los valores a acreditar los días sábados y domingos"
+            placement="bottom"
+          >
+            <span style="color:red">
+              <i class="el-icon-warning-outline" type="danger"></i>
+            </span>
+          </el-tooltip>
         </span>
         <router-link :to="{name: 'Cobranzas'}">
           <el-button
@@ -13,7 +23,7 @@
           >Ir</el-button>
         </router-link>
       </div>
-
+      <div class="card-panel-title">REAL ACREDITACION</div>
       <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
         <strong>{{datos.sumatoria | numeralFormat('$ 0,0[.]00') }}</strong>
@@ -23,8 +33,6 @@
         <strong>{{datos.promedio | numeralFormat('$ 0,0[.]00') }}</strong>
       </div>
       <div class="card-panel-text">(Calculo en base a {{datos.cantidad}} días)</div>
-      <div></div>
-
       <el-collapse>
         <el-collapse-item title="Ver resumen diario" name="1">
           <el-table :data="datos.datos" border height="400" style="width: 100%; magin-top: 20px">
@@ -32,6 +40,19 @@
             <el-table-column prop="TOTAL" label="Importe"></el-table-column>
           </el-table>
         </el-collapse-item>
+      </el-collapse>
+      <div class="card-panel-title">INDICADORES DE GESTION</div>
+      <div class="card-panel-text">Total Acumulado:</div>
+      <div class="card-panel-num">
+        <strong>{{0 | numeralFormat('$ 0,0[.]00') }}</strong>
+      </div>
+      <div class="card-panel-text">Promedio Diario:</div>
+      <div class="card-panel-num">
+        <strong>{{0 | numeralFormat('$ 0,0[.]00') }}</strong>
+      </div>
+      <div class="card-panel-text">(Calculo en base a {{0}} días)</div>
+      <el-collapse>
+        <el-collapse-item title="Ver resumen diario" name="1"></el-collapse-item>
       </el-collapse>
     </el-card>
   </div>

@@ -9,7 +9,9 @@
             content="La información mostrada corresponde a la carga diaria realizada por RRHH en AS400"
             placement="bottom"
           >
-            <i class="el-icon-warning-outline" type="danger"></i>
+            <span style="color:red">
+              <i class="el-icon-warning-outline" type="danger"></i>
+            </span>
           </el-tooltip>
         </span>
 

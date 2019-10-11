@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <h1>Resúmen Período Actual: {{objetoAnalisis.periodo}}</h1>
+      <h1>Tablero de Mando {{periodo}}</h1>
 
       <el-row shadow="always">
         <el-col :span="24">
@@ -64,13 +64,6 @@ export default {
   },
   data() {
     return {
-      objetoAnalisis: {
-        periodo: "",
-        cantidad: { ventas: 0, cobranzas: 0 },
-        promedios: { ventas: 0.0, cobranzas: 0.0 },
-        sumatoria: { ventas: 0.0, cobranzas: 0.0 },
-        datos: []
-      },
       objetoProduccion: { datos: [] },
       objetoRRHH: { datos: [] },
       objetoCobranzas: {
@@ -154,7 +147,6 @@ export default {
       await this.getRRHH(params);
       await this.getVentas(params);
       await this.getCobranzas(params);
-      this.armarSabana();
     },
     formatearFecha(fecha) {
       return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
@@ -170,7 +162,6 @@ export default {
       }
     },
     async inicializar() {
-      //await this.getDatos();
       await this.getProduccion();
       await this.getRRHH();
       await this.getVentas();
@@ -181,10 +172,10 @@ export default {
       const ENDPOINT = "WSDOTACTP";
       let parametros = "";
       if (!isUndefined(params)) parametros = params;
-      axios
+
+      await axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
         .then(response => {
-          //this.objetoRRHH = response.data.RRHH;
           let items = response.data.RRHH;
 
           for (const item of items) {
@@ -208,7 +199,10 @@ export default {
       await axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
         .then(response => {
-          let listaCobranzas = response.data.COBRANZAS;
+          let listaCobranzas = response.data.COBRANZAS.filter(item => {
+            console.log(moment.utc(item.FECHA).isBefore(moment.utc()));
+            return moment.utc(item.FECHA).isBefore(moment.utc());
+          });
           let i = 0;
           let sumatoria = 0;
           for (const item of listaCobranzas) {
@@ -217,6 +211,7 @@ export default {
               i++;
             }
           }
+
           this.objetoCobranzas.datos = listaCobranzas;
           this.objetoCobranzas.promedio = sumatoria / parseFloat(i);
           this.objetoCobranzas.sumatoria = sumatoria;
@@ -269,7 +264,7 @@ export default {
       const ENDPOINT = "WSPROMESP";
       let parametros = "";
       if (!isUndefined(params)) parametros = params;
-      axios
+      await axios
         .get(`${process.env.VUE_APP_AS400_API}${ENDPOINT}${parametros}`)
         .then(response => {
           let items = response.data.PRODUCCION;

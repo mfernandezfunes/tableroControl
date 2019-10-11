@@ -24,6 +24,7 @@
             <el-select
               v-model="canalVenta"
               multiple
+              disabled="true"
               collapse-tags
               style="margin-left: 20px;"
               :placeholder="$t('form.select.channel')"

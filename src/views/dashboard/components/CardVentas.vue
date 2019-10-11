@@ -13,7 +13,7 @@
           >Ir</el-button>
         </router-link>
       </div>
-
+      <div class="card-panel-title">REAL FACTURADO</div>
       <div class="card-panel-text">Total Acumulado:</div>
       <div class="card-panel-num">
         <strong>{{datos.sumatoria | numeralFormat('$ 0,0[.]00') }}</strong>
@@ -26,10 +26,23 @@
       <el-collapse>
         <el-collapse-item title="Ver resumen diario" name="1">
           <el-table :data="datos.datos" border height="400" style="width: 100%; magin-top: 20px">
-            <el-table-column prop="FECHA" label="Fecha"></el-table-column>
+            <el-table-column prop="FECHA" label="Fecha" formatter="cell => alert(cell)"></el-table-column>
             <el-table-column prop="TOTAL" label="Importe"></el-table-column>
           </el-table>
         </el-collapse-item>
+      </el-collapse>
+      <div class="card-panel-title">INDICADORES DE GESTION</div>
+      <div class="card-panel-text">Total Acumulado:</div>
+      <div class="card-panel-num">
+        <strong>{{0 | numeralFormat('$ 0,0[.]00') }}</strong>
+      </div>
+      <div class="card-panel-text">Promedio Diario:</div>
+      <div class="card-panel-num">
+        <strong>{{0 | numeralFormat('$ 0,0[.]00') }}</strong>
+      </div>
+      <div class="card-panel-text">(Calculo en base a {{0}} días)</div>
+      <el-collapse>
+        <el-collapse-item title="Ver resumen diario" name="1"></el-collapse-item>
       </el-collapse>
     </el-card>
   </div>
@@ -53,6 +66,9 @@ export default {
     },
     formatearFecha(fecha) {
       return fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g, "$3/$2/$1");
+    },
+    formatAuthority(value) {
+      return `ITEM ${value}`;
     }
   }
 };

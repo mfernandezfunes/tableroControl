@@ -19,7 +19,21 @@
                   :disabled="item.disabled"
                 ></el-option>
               </el-select>
-
+              <el-select
+                v-model="canalVenta"
+                multiple
+                disabled="true"
+                collapse-tags
+                style="margin-left: 20px;"
+                :placeholder="$t('form.select.channel')"
+              >
+                <el-option
+                  v-for="item in canalVentasOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
               <el-date-picker v-model="periodo" type="month" :placeholder="$t('form.select.month')"></el-date-picker>
               <el-button @click="actualizarDatos">{{ $t("btn.update") }}</el-button>
               <el-button @click="actualizarGrafico">{{ $t("btn.draw") }}</el-button>
@@ -114,6 +128,84 @@ export default {
         {
           value: "2",
           label: "HIGIENE 3000 S.A.",
+          disabled: true
+        }
+      ],
+      canalVenta: [],
+      canalVentasOptions: [
+        {
+          value: "1",
+          label: "Institucionales Vendedores MoBiles",
+          disabled: false
+        },
+        {
+          value: "2",
+          label: "Grandes Clientes del Interior",
+          disabled: false
+        },
+        {
+          value: "3",
+          label: "Licitaciones",
+          disabled: false
+        },
+        {
+          value: "4",
+          label: "Exportaciones",
+          disabled: false
+        },
+        {
+          value: "5",
+          label: "Punto de Venta - Local Belgrano 1250",
+          disabled: true
+        },
+        {
+          value: "6",
+          label: "Consumo Interno",
+          disabled: true
+        },
+        {
+          value: "7",
+          label: "Institucionales CALL CENTER",
+          disabled: true
+        },
+        {
+          value: "8",
+          label: "Institucionales San Juan",
+          disabled: true
+        },
+        {
+          value: "9",
+          label: "Convertidores de Bobinas Industriales",
+          disabled: true
+        },
+        {
+          value: "10",
+          label: "Bienes de Uso",
+          disabled: true
+        },
+        {
+          value: "11",
+          label: "Personal",
+          disabled: true
+        },
+        {
+          value: "12",
+          label: "Canjes",
+          disabled: true
+        },
+        {
+          value: "13",
+          label: "La Bernalesa-PILB",
+          disabled: true
+        },
+        {
+          value: "14",
+          label: "Gdes. Clientes del Interior Cuentas R9*",
+          disabled: true
+        },
+        {
+          value: "15",
+          label: "PROMO VENTAS",
           disabled: true
         }
       ],
